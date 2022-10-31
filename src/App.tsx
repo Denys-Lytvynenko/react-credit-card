@@ -1,9 +1,10 @@
 import CreditCard from "./components/CreditCard/CreditCard";
 
+import "./App.scss";
 const App = () => {
     return (
         <div className="App">
-            <CreditCard bankName="Mono Bank" paymentSystem="visa" />
+            <CreditCard bankName="monobank" paymentSystem="visa" />
         </div>
     );
 };

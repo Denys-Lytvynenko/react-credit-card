@@ -5,6 +5,8 @@ import { CreditCardProps } from "./types";
 import mastercard from "images/mastercard.svg";
 import visa from "images/visa.svg";
 
+import styles from "./CreditCard.module.scss";
+
 const CreditCard: FC<CreditCardProps> = ({
     bankName,
     paymentSystem,
@@ -16,24 +18,24 @@ const CreditCard: FC<CreditCardProps> = ({
     );
 
     return (
-        <form className="credit-card">
-            <div className="front">
-                <div className="card-data-row">
-                    <div className="brand-name">{bankName}</div>
+        <form className={styles["credit-card"]}>
+            <div className={styles.front}>
+                <div className={styles["card-data-row"]}>
+                    <div className={styles["brand-name"]}>{bankName}</div>
 
                     <img
                         src={paymentSystemIcon}
                         alt="paymentSystemIcon"
-                        className="logo"
+                        className={styles.logo}
                     />
                 </div>
 
-                <fieldset className="form-group">
+                <fieldset className={styles["form-group"]}>
                     <legend>{cardNumberLabel}</legend>
 
                     <label htmlFor="cc-1">Card number</label>
 
-                    <div className="cc-inputs">
+                    <div className={styles["horizontal-input-stack"]}>
                         <input
                             type="tel"
                             max={4}
@@ -76,15 +78,20 @@ const CreditCard: FC<CreditCardProps> = ({
                     </div>
                 </fieldset>
 
-                <div className="input-row">
-                    <div className="form-group name-group">
+                <div className={styles["input-row"]}>
+                    <div
+                        className={`${styles["form-group"]} ${styles["name-group"]} `}
+                    >
                         <label htmlFor="name">Name</label>
                         <input type="text" id="name" required />
                     </div>
-                    <fieldset className="form-group">
+
+                    <fieldset className={`${styles["form-group"]}`}>
                         <legend>Expiration</legend>
+
                         <label htmlFor="expiration-month">Expiration</label>
-                        <div className="horizontal-input-stack">
+
+                        <div className={styles["horizontal-input-stack"]}>
                             <select
                                 id="expiration-month"
                                 aria-label="Expiration Month"
@@ -103,6 +110,7 @@ const CreditCard: FC<CreditCardProps> = ({
                                 <option value="11">11</option>
                                 <option value="12">12</option>
                             </select>
+
                             <select
                                 id="expiration-year"
                                 aria-label="Expiration year"
@@ -122,11 +130,21 @@ const CreditCard: FC<CreditCardProps> = ({
                     </fieldset>
                 </div>
             </div>
-            <div className="back">
-                <div className="stripe"></div>
-                <div className="form-group cvs-group">
+            <div className={styles["back"]}>
+                <div className={styles["stripe"]} />
+
+                <div
+                    className={`${styles["form-group"]} ${styles["cvc-group"]}`}
+                >
                     <label htmlFor="cvc">CVC</label>
-                    <input type="tel" maxLength={3} id="cvc" required />
+
+                    <input
+                        type="tel"
+                        maxLength={3}
+                        id="cvc"
+                        required
+                        className={styles["cvc-input"]}
+                    />
                 </div>
             </div>
         </form>
