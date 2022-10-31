@@ -11,11 +11,30 @@ const CreditCard: FC<CreditCardProps> = ({
     bankName,
     paymentSystem,
     cardNumberLabel = "Card number",
+    expirationDateLimit = 3,
 }) => {
+    /**
+     * Depending from payment system shows appropriate emblem in the top right corner of the card.
+     */
     const paymentSystemIcon = useMemo(
         () => (paymentSystem === "visa" ? visa : mastercard),
         [paymentSystem]
     );
+
+    /**
+     * Calculates options for the expiration year select field starting from current year and to the expiration date limit.
+     */
+    const yearsOptions = useMemo(() => {
+        let options: JSX.Element[] = [];
+
+        const currentYear = new Date().getFullYear();
+
+        for (let i = currentYear; i < currentYear + expirationDateLimit; i++) {
+            options.push(<option value={i}>{i}</option>);
+        }
+
+        return options;
+    }, [expirationDateLimit]);
 
     return (
         <form className={styles["credit-card"]}>
@@ -116,15 +135,7 @@ const CreditCard: FC<CreditCardProps> = ({
                                 aria-label="Expiration year"
                                 required
                             >
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                                <option value="2030">2030</option>
+                                {yearsOptions}
                             </select>
                         </div>
                     </fieldset>
