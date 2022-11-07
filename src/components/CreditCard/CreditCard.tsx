@@ -1,12 +1,4 @@
-import {
-    ChangeEvent,
-    FC,
-    FormEvent,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { FC, FormEvent, useEffect, useMemo, useRef } from "react";
 
 import { CreditCardProps } from "./types";
 
@@ -48,11 +40,10 @@ const CreditCard: FC<CreditCardProps> = ({
         return options;
     }, [expirationDateLimit]);
 
-    const [cardNumber, setCardNumber] = useState("0000000000000000");
-
-    const handleCardNumberInput = (event: ChangeEvent<HTMLInputElement>) => {
-        setCardNumber(event.target.value);
-    };
+    const cardNumber1Ref = useRef<HTMLInputElement>(null);
+    const cardNumber2Ref = useRef<HTMLInputElement>(null);
+    const cardNumber3Ref = useRef<HTMLInputElement>(null);
+    const cardNumber4Ref = useRef<HTMLInputElement>(null);
 
     const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -67,8 +58,6 @@ const CreditCard: FC<CreditCardProps> = ({
 
         return input.matches("input") && parent !== null;
     };
-
-    const cardNumberRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
@@ -143,11 +132,14 @@ const CreditCard: FC<CreditCardProps> = ({
 
     const submitForm = (event: FormEvent) => {
         event.preventDefault();
+        const cardNumber = `${cardNumber1Ref.current?.value}${cardNumber2Ref.current?.value}${cardNumber3Ref.current?.value}${cardNumber4Ref.current?.value}`;
 
         alert(`Credit card data is:
             Card number: ${cardNumber},
-            Card holder name: ${nameInputRef.current?.value},
-            Expiration date: ${expirationMonthRef.current?.value} ${expirationYearRef.current?.value}
+            Card holder name: ${nameInputRef.current?.value.toUpperCase()},
+            Expiration date: ${expirationMonthRef.current?.value} ${
+            expirationYearRef.current?.value
+        }
             CVC: ${cvcRef.current?.value}
         `);
     };
@@ -181,7 +173,7 @@ const CreditCard: FC<CreditCardProps> = ({
                             name="cc-1"
                             id="cc-1"
                             required
-                            ref={cardNumberRef}
+                            ref={cardNumber1Ref}
                         />
 
                         <input
@@ -191,7 +183,7 @@ const CreditCard: FC<CreditCardProps> = ({
                             name="cc-1"
                             id="cc-1"
                             required
-                            ref={cardNumberRef}
+                            ref={cardNumber2Ref}
                         />
 
                         <input
@@ -201,7 +193,7 @@ const CreditCard: FC<CreditCardProps> = ({
                             name="cc-1"
                             id="cc-1"
                             required
-                            ref={cardNumberRef}
+                            ref={cardNumber3Ref}
                         />
 
                         <input
@@ -211,7 +203,7 @@ const CreditCard: FC<CreditCardProps> = ({
                             name="cc-1"
                             id="cc-1"
                             required
-                            ref={cardNumberRef}
+                            ref={cardNumber4Ref}
                         />
                     </div>
                 </fieldset>
