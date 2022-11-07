@@ -5,7 +5,7 @@ import "./App.scss";
 const App = () => {
     return (
         <div className="App">
-            <CreditCard bankName="monobank" paymentSystem="visa" />
+            <CreditCard bankName="VostokBank" paymentSystem="mastercard" />
         </div>
     );
 };

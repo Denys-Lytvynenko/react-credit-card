@@ -1,4 +1,12 @@
-import { FC, useMemo } from "react";
+import {
+    ChangeEvent,
+    FC,
+    FormEvent,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
 import { CreditCardProps } from "./types";
 
@@ -30,14 +38,81 @@ const CreditCard: FC<CreditCardProps> = ({
         const currentYear = new Date().getFullYear();
 
         for (let i = currentYear; i < currentYear + expirationDateLimit; i++) {
-            options.push(<option value={i}>{i}</option>);
+            options.push(
+                <option value={i} key={i}>
+                    {i}
+                </option>
+            );
         }
 
         return options;
     }, [expirationDateLimit]);
 
+    const [cardNumber, setCardNumber] = useState("0000000000000000");
+
+    const handleCardNumberInput = (event: ChangeEvent<HTMLInputElement>) => {
+        setCardNumber(event.target.value);
+    };
+
+    const nameInputRef = useRef<HTMLInputElement>(null);
+
+    const expirationMonthRef = useRef<HTMLSelectElement>(null);
+
+    const expirationYearRef = useRef<HTMLSelectElement>(null);
+
+    const cvcRef = useRef<HTMLInputElement>(null);
+
+    const isClosestParent = (input: any) => {
+        const parent = input?.closest("[data-card-number]");
+
+        return !!input && parent !== null;
+    };
+
+    useEffect(() => {
+        const keyDownHandler = (event: any) => {
+            const input = event.target;
+
+            if (!isClosestParent(input)) return;
+
+            const key = event.key;
+
+            switch (key) {
+                case "ArrowLeft":
+                    const prev = input.previousSibling;
+                    if (prev) prev.focus();
+                    break;
+                case "ArrowRight":
+                    const next = input.nextSibling;
+                    if (next) next.focus();
+                    break;
+                default:
+                    if (input.value.length === 4) {
+                        console.log("YES");
+                    }
+                    break;
+            }
+        };
+
+        document.addEventListener("keydown", keyDownHandler);
+
+        return () => {
+            document.removeEventListener("keydown", keyDownHandler);
+        };
+    }, []);
+
+    const submitForm = (event: FormEvent) => {
+        event.preventDefault();
+
+        alert(`Credit card data is:
+            Card number: ${cardNumber},
+            Card holder name: ${nameInputRef.current?.value},
+            Expiration date: ${expirationMonthRef.current?.value} ${expirationYearRef.current?.value}
+            CVC: ${cvcRef.current?.value}
+        `);
+    };
+
     return (
-        <form className={styles["credit-card"]}>
+        <form className={styles["credit-card"]} onSubmit={submitForm}>
             <div className={styles.front}>
                 <div className={styles["card-data-row"]}>
                     <div className={styles["brand-name"]}>{bankName}</div>
@@ -54,7 +129,10 @@ const CreditCard: FC<CreditCardProps> = ({
 
                     <label htmlFor="cc-1">Card number</label>
 
-                    <div className={styles["horizontal-input-stack"]}>
+                    <div
+                        className={styles["horizontal-input-stack"]}
+                        data-card-number
+                    >
                         <input
                             type="tel"
                             max={4}
@@ -102,7 +180,13 @@ const CreditCard: FC<CreditCardProps> = ({
                         className={`${styles["form-group"]} ${styles["name-group"]} `}
                     >
                         <label htmlFor="name">Name</label>
-                        <input type="text" id="name" required />
+
+                        <input
+                            type="text"
+                            id="name"
+                            required
+                            ref={nameInputRef}
+                        />
                     </div>
 
                     <fieldset className={`${styles["form-group"]}`}>
@@ -115,6 +199,7 @@ const CreditCard: FC<CreditCardProps> = ({
                                 id="expiration-month"
                                 aria-label="Expiration Month"
                                 required
+                                ref={expirationMonthRef}
                             >
                                 <option value="01">01</option>
                                 <option value="02">02</option>
@@ -134,6 +219,7 @@ const CreditCard: FC<CreditCardProps> = ({
                                 id="expiration-year"
                                 aria-label="Expiration year"
                                 required
+                                ref={expirationYearRef}
                             >
                                 {yearsOptions}
                             </select>
@@ -141,6 +227,7 @@ const CreditCard: FC<CreditCardProps> = ({
                     </fieldset>
                 </div>
             </div>
+
             <div className={styles["back"]}>
                 <div className={styles["stripe"]} />
 
@@ -153,11 +240,14 @@ const CreditCard: FC<CreditCardProps> = ({
                         type="tel"
                         maxLength={3}
                         id="cvc"
-                        required
                         className={styles["cvc-input"]}
+                        required
+                        ref={cvcRef}
                     />
                 </div>
             </div>
+
+            <button type="submit">submit</button>
         </form>
     );
 };
