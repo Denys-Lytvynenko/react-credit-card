@@ -65,29 +65,70 @@ const CreditCard: FC<CreditCardProps> = ({
     const isClosestParent = (input: any) => {
         const parent = input?.closest("[data-card-number]");
 
-        return !!input && parent !== null;
+        return input.matches("input") && parent !== null;
     };
+
+    const cardNumberRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             const input = event.target;
 
+            console.log("input target", {
+                selectionStart: input.selectionStart,
+                selectionEnd: input.selectionEnd,
+            });
             if (!isClosestParent(input)) return;
+
+            const prev = input.previousSibling;
+            const next = input.nextSibling;
 
             const key = event.key;
 
             switch (key) {
                 case "ArrowLeft":
-                    const prev = input.previousSibling;
-                    if (prev) prev.focus();
+                    if (
+                        input.selectionStart === 0 &&
+                        input.selectionEnd === 0
+                    ) {
+                        if (prev) {
+                            prev.focus();
+                            prev.selectionStart = prev.value.length - 1;
+                            prev.selectionEnd = prev.value.length - 1;
+                        }
+                    }
                     break;
+
                 case "ArrowRight":
-                    const next = input.nextSibling;
-                    if (next) next.focus();
+                    if (
+                        input.selectionStart === input.value.length &&
+                        input.selectionEnd === input.value.length
+                    ) {
+                        if (next) {
+                            next.focus();
+                            next.selectionStart = 0;
+                            next.selectionEnd = 0;
+                        }
+                    }
                     break;
+
                 default:
-                    if (input.value.length === 4) {
-                        console.log("YES");
+                    if (
+                        input.selectionStart === 4 &&
+                        input.selectionEnd === 4
+                    ) {
+                        if (next) {
+                            next.focus();
+                        }
+                    }
+                    if (
+                        input.selectionStart === 0 &&
+                        input.selectionEnd === 0 &&
+                        key === "Backspace"
+                    ) {
+                        if (prev) prev.focus();
+                        prev.selectionStart = prev.value.length;
+                        prev.selectionEnd = prev.value.length;
                     }
                     break;
             }
@@ -134,43 +175,43 @@ const CreditCard: FC<CreditCardProps> = ({
                         data-card-number
                     >
                         <input
-                            type="tel"
-                            max={4}
+                            type="text"
+                            maxLength={4}
                             aria-label="Credit card first 4 digits"
                             name="cc-1"
                             id="cc-1"
                             required
-                            pattern="[0-9]{4}"
+                            ref={cardNumberRef}
                         />
 
                         <input
-                            type="tel"
-                            max={4}
+                            type="text"
+                            maxLength={4}
                             aria-label="Credit card second 4 digits"
                             name="cc-1"
                             id="cc-1"
                             required
-                            pattern="[0-9]{4}"
+                            ref={cardNumberRef}
                         />
 
                         <input
-                            type="tel"
-                            max={4}
+                            type="text"
+                            maxLength={4}
                             aria-label="Credit card third 4 digits"
                             name="cc-1"
                             id="cc-1"
                             required
-                            pattern="[0-9]{4}"
+                            ref={cardNumberRef}
                         />
 
                         <input
-                            type="tel"
-                            max={4}
+                            type="text"
+                            maxLength={4}
                             aria-label="Credit card last 4 digits"
                             name="cc-1"
                             id="cc-1"
                             required
-                            pattern="[0-9]{4}"
+                            ref={cardNumberRef}
                         />
                     </div>
                 </fieldset>
