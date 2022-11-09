@@ -19,3 +19,14 @@ export type CreditCardProps = {
      */
     expirationDateLimit?: number;
 };
+
+export type CreditCardInitialValuesType = {
+    cardNumber1: string;
+    cardNumber2: string;
+    cardNumber3: string;
+    cardNumber4: string;
+    cardHolderName: string;
+    expirationMonth: string;
+    expirationYear: string;
+    ccvCode: string;
+};

@@ -1,11 +1,23 @@
-import { FC, FormEvent, useEffect, useMemo, useRef } from "react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { FC, useMemo } from "react";
 
-import { CreditCardProps } from "./types";
+import { CreditCardInitialValuesType, CreditCardProps } from "./types";
 
 import mastercard from "images/mastercard.svg";
 import visa from "images/visa.svg";
 
 import styles from "./CreditCard.module.scss";
+
+const creditCardInitialValues: CreditCardInitialValuesType = {
+    cardNumber1: "",
+    cardNumber2: "",
+    cardNumber3: "",
+    cardNumber4: "",
+    cardHolderName: "",
+    expirationMonth: "",
+    expirationYear: "",
+    ccvCode: "",
+};
 
 const CreditCard: FC<CreditCardProps> = ({
     bankName,
@@ -40,248 +52,233 @@ const CreditCard: FC<CreditCardProps> = ({
         return options;
     }, [expirationDateLimit]);
 
-    const cardNumber1Ref = useRef<HTMLInputElement>(null);
-    const cardNumber2Ref = useRef<HTMLInputElement>(null);
-    const cardNumber3Ref = useRef<HTMLInputElement>(null);
-    const cardNumber4Ref = useRef<HTMLInputElement>(null);
+    //
+    //     const isClosestParent = (input: any) => {
+    //         const parent = input?.closest("[data-card-number]");
 
-    const nameInputRef = useRef<HTMLInputElement>(null);
+    //         return input.matches("input") && parent !== null;
+    //     };
 
-    const expirationMonthRef = useRef<HTMLSelectElement>(null);
+    //     useEffect(() => {
+    //         const keyDownHandler = (event: any) => {
+    //             const input = event.target;
 
-    const expirationYearRef = useRef<HTMLSelectElement>(null);
+    //             if (!isClosestParent(input)) return;
 
-    const cvcRef = useRef<HTMLInputElement>(null);
+    //             const prev = input.previousSibling;
+    //             const next = input.nextSibling;
 
-    const isClosestParent = (input: any) => {
-        const parent = input?.closest("[data-card-number]");
+    //             const key = event.key;
 
-        return input.matches("input") && parent !== null;
-    };
+    //             switch (key) {
+    //                 case "ArrowLeft":
+    //                     if (
+    //                         input.selectionStart === 0 &&
+    //                         input.selectionEnd === 0
+    //                     ) {
+    //                         if (prev) {
+    //                             prev.focus();
+    //                             prev.selectionStart = prev.value.length - 1;
+    //                             prev.selectionEnd = prev.value.length - 1;
+    //                         }
+    //                     }
+    //                     break;
 
-    useEffect(() => {
-        const keyDownHandler = (event: any) => {
-            const input = event.target;
+    //                 case "ArrowRight":
+    //                     if (
+    //                         input.selectionStart === input.value.length &&
+    //                         input.selectionEnd === input.value.length
+    //                     ) {
+    //                         if (next) {
+    //                             next.focus();
+    //                             next.selectionStart = 0;
+    //                             next.selectionEnd = 0;
+    //                         }
+    //                     }
+    //                     break;
 
-            console.log("input target", {
-                selectionStart: input.selectionStart,
-                selectionEnd: input.selectionEnd,
-            });
-            if (!isClosestParent(input)) return;
+    //                 default:
+    //                     if (
+    //                         input.selectionStart === 4 &&
+    //                         input.selectionEnd === 4
+    //                     ) {
+    //                         /**
+    //                          * Focus next field if current is completed
+    //                          */
+    //                         if (next) {
+    //                             next.focus();
+    //                         }
+    //                     }
 
-            const prev = input.previousSibling;
-            const next = input.nextSibling;
+    //                     /**
+    //                      * Focus on the previous field on card number deletion
+    //                      */
+    //                     if (
+    //                         input.selectionStart === 0 &&
+    //                         input.selectionEnd === 0 &&
+    //                         key === "Backspace"
+    //                     ) {
+    //                         if (prev) prev.focus();
+    //                         prev.selectionStart = prev.value.length;
+    //                         prev.selectionEnd = prev.value.length;
+    //                     }
+    //                     break;
+    //             }
+    //         };
 
-            const key = event.key;
+    //         document.addEventListener("keydown", keyDownHandler);
 
-            switch (key) {
-                case "ArrowLeft":
-                    if (
-                        input.selectionStart === 0 &&
-                        input.selectionEnd === 0
-                    ) {
-                        if (prev) {
-                            prev.focus();
-                            prev.selectionStart = prev.value.length - 1;
-                            prev.selectionEnd = prev.value.length - 1;
-                        }
-                    }
-                    break;
+    //         return () => {
+    //             document.removeEventListener("keydown", keyDownHandler);
+    //         };
+    //     }, []);
 
-                case "ArrowRight":
-                    if (
-                        input.selectionStart === input.value.length &&
-                        input.selectionEnd === input.value.length
-                    ) {
-                        if (next) {
-                            next.focus();
-                            next.selectionStart = 0;
-                            next.selectionEnd = 0;
-                        }
-                    }
-                    break;
-
-                default:
-                    if (
-                        input.selectionStart === 4 &&
-                        input.selectionEnd === 4
-                    ) {
-                        if (next) {
-                            next.focus();
-                        }
-                    }
-                    if (
-                        input.selectionStart === 0 &&
-                        input.selectionEnd === 0 &&
-                        key === "Backspace"
-                    ) {
-                        if (prev) prev.focus();
-                        prev.selectionStart = prev.value.length;
-                        prev.selectionEnd = prev.value.length;
-                    }
-                    break;
-            }
-        };
-
-        document.addEventListener("keydown", keyDownHandler);
-
-        return () => {
-            document.removeEventListener("keydown", keyDownHandler);
-        };
-    }, []);
-
-    const submitForm = (event: FormEvent) => {
-        event.preventDefault();
-        const cardNumber = `${cardNumber1Ref.current?.value}${cardNumber2Ref.current?.value}${cardNumber3Ref.current?.value}${cardNumber4Ref.current?.value}`;
-
-        alert(`Credit card data is:
-            Card number: ${cardNumber},
-            Card holder name: ${nameInputRef.current?.value.toUpperCase()},
-            Expiration date: ${expirationMonthRef.current?.value} ${
-            expirationYearRef.current?.value
-        }
-            CVC: ${cvcRef.current?.value}
-        `);
+    const submitForm = (
+        values: CreditCardInitialValuesType,
+        helpers: FormikHelpers<CreditCardInitialValuesType>
+    ) => {
+        console.log("Form values", values);
+        console.log("Form helpers", helpers);
     };
 
     return (
-        <form className={styles["credit-card"]} onSubmit={submitForm}>
-            <div className={styles.front}>
-                <div className={styles["card-data-row"]}>
-                    <div className={styles["brand-name"]}>{bankName}</div>
+        <Formik initialValues={creditCardInitialValues} onSubmit={submitForm}>
+            <Form className={styles["credit-card"]}>
+                <div className={styles.front}>
+                    <div className={styles["card-data-row"]}>
+                        <div className={styles["brand-name"]}>{bankName}</div>
 
-                    <img
-                        src={paymentSystemIcon}
-                        alt="paymentSystemIcon"
-                        className={styles.logo}
-                    />
-                </div>
-
-                <fieldset className={styles["form-group"]}>
-                    <legend>{cardNumberLabel}</legend>
-
-                    <label htmlFor="cc-1">Card number</label>
-
-                    <div
-                        className={styles["horizontal-input-stack"]}
-                        data-card-number
-                    >
-                        <input
-                            type="text"
-                            maxLength={4}
-                            aria-label="Credit card first 4 digits"
-                            name="cc-1"
-                            id="cc-1"
-                            required
-                            ref={cardNumber1Ref}
-                        />
-
-                        <input
-                            type="text"
-                            maxLength={4}
-                            aria-label="Credit card second 4 digits"
-                            name="cc-1"
-                            id="cc-1"
-                            required
-                            ref={cardNumber2Ref}
-                        />
-
-                        <input
-                            type="text"
-                            maxLength={4}
-                            aria-label="Credit card third 4 digits"
-                            name="cc-1"
-                            id="cc-1"
-                            required
-                            ref={cardNumber3Ref}
-                        />
-
-                        <input
-                            type="text"
-                            maxLength={4}
-                            aria-label="Credit card last 4 digits"
-                            name="cc-1"
-                            id="cc-1"
-                            required
-                            ref={cardNumber4Ref}
-                        />
-                    </div>
-                </fieldset>
-
-                <div className={styles["input-row"]}>
-                    <div
-                        className={`${styles["form-group"]} ${styles["name-group"]} `}
-                    >
-                        <label htmlFor="name">Name</label>
-
-                        <input
-                            type="text"
-                            id="name"
-                            required
-                            ref={nameInputRef}
+                        <img
+                            src={paymentSystemIcon}
+                            alt="paymentSystemIcon"
+                            className={styles.logo}
                         />
                     </div>
 
-                    <fieldset className={`${styles["form-group"]}`}>
-                        <legend>Expiration</legend>
+                    <fieldset className={styles["form-group"]}>
+                        <legend>{cardNumberLabel}</legend>
 
-                        <label htmlFor="expiration-month">Expiration</label>
+                        <label htmlFor="cc-1">Card number</label>
 
-                        <div className={styles["horizontal-input-stack"]}>
-                            <select
-                                id="expiration-month"
-                                aria-label="Expiration Month"
+                        <div
+                            className={styles["horizontal-input-stack"]}
+                            data-card-number
+                        >
+                            <Field
+                                name="cardNumber1"
+                                type="text"
+                                maxLength={4}
+                                aria-label="Credit card first 4 digits"
+                                id="cc-1"
                                 required
-                                ref={expirationMonthRef}
-                            >
-                                <option value="01">01</option>
-                                <option value="02">02</option>
-                                <option value="03">03</option>
-                                <option value="04">04</option>
-                                <option value="05">05</option>
-                                <option value="06">06</option>
-                                <option value="07">07</option>
-                                <option value="08">08</option>
-                                <option value="09">09</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
+                            />
 
-                            <select
-                                id="expiration-year"
-                                aria-label="Expiration year"
+                            <Field
+                                name="cardNumber2"
+                                type="text"
+                                maxLength={4}
+                                aria-label="Credit card second 4 digits"
+                                id="cc-1"
                                 required
-                                ref={expirationYearRef}
-                            >
-                                {yearsOptions}
-                            </select>
+                            />
+
+                            <Field
+                                name="cardNumber3"
+                                type="text"
+                                maxLength={4}
+                                aria-label="Credit card third 4 digits"
+                                id="cc-1"
+                                required
+                            />
+
+                            <Field
+                                name="cardNumber4"
+                                type="text"
+                                maxLength={4}
+                                aria-label="Credit card last 4 digits"
+                                id="cc-1"
+                                required
+                            />
                         </div>
                     </fieldset>
+
+                    <div className={styles["input-row"]}>
+                        <div
+                            className={`${styles["form-group"]} ${styles["name-group"]} `}
+                        >
+                            <label htmlFor="name">Name</label>
+
+                            <Field
+                                name="cardHolderName"
+                                type="text"
+                                id="name"
+                                required
+                            />
+                        </div>
+
+                        <fieldset className={`${styles["form-group"]}`}>
+                            <legend>Expiration</legend>
+
+                            <label htmlFor="expiration-month">Expiration</label>
+
+                            <div className={styles["horizontal-input-stack"]}>
+                                <Field
+                                    name="expirationMonth"
+                                    as="select"
+                                    id="expiration-month"
+                                    aria-label="Expiration Month"
+                                    required
+                                >
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </Field>
+
+                                <Field
+                                    name="expirationYear"
+                                    as="select"
+                                    id="expiration-year"
+                                    aria-label="Expiration year"
+                                    required
+                                >
+                                    {yearsOptions}
+                                </Field>
+                            </div>
+                        </fieldset>
+                    </div>
                 </div>
-            </div>
 
-            <div className={styles["back"]}>
-                <div className={styles["stripe"]} />
+                <div className={styles["back"]}>
+                    <div className={styles["stripe"]} />
 
-                <div
-                    className={`${styles["form-group"]} ${styles["cvc-group"]}`}
-                >
-                    <label htmlFor="cvc">CVC</label>
+                    <div
+                        className={`${styles["form-group"]} ${styles["ccv-group"]}`}
+                    >
+                        <label htmlFor="ccv">ccv</label>
 
-                    <input
-                        type="tel"
-                        maxLength={3}
-                        id="cvc"
-                        className={styles["cvc-input"]}
-                        required
-                        ref={cvcRef}
-                    />
+                        <Field
+                            name="ccvCode"
+                            type="text"
+                            maxLength={3}
+                            id="ccv"
+                            className={styles["ccv-input"]}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit">submit</button>
-        </form>
+                <button type="submit">submit</button>
+            </Form>
+        </Formik>
     );
 };
 
