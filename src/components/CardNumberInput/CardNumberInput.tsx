@@ -1,20 +1,56 @@
-import { Field } from "formik";
-import {
-    ChangeEvent,
-    ClipboardEvent,
-    Dispatch,
-    FC,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { Field, useField } from "formik";
+import { ChangeEvent, ClipboardEvent, FC, useEffect, useRef } from "react";
 
 import { CardNumberInputType } from "./types";
 
 import styles from "./CardNumberInput.module.scss";
+import { fourDigits, onlyNumbers } from "../../utils/patterns";
 
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
+    const [{ value: value1 }, , { setValue: setValue1 }] =
+        useField("cardNumber1");
+    const [{ value: value2 }, , { setValue: setValue2 }] =
+        useField("cardNumber2");
+    const [{ value: value3 }, , { setValue: setValue3 }] =
+        useField("cardNumber3");
+    const [{ value: value4 }, , { setValue: setValue4 }] =
+        useField("cardNumber4");
+
+    const cardNumberHandler = (
+        event: ChangeEvent<HTMLInputElement>,
+        setStateFunction: (value: string) => void
+    ) => {
+        const value = event.target.value;
+
+        if (value.match(onlyNumbers)) setStateFunction(value);
+    };
+
+    const cardNumber1Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setValue1);
+    const cardNumber2Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setValue2);
+    const cardNumber3Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setValue3);
+    const cardNumber4Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setValue4);
+
+    const handleOnPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+        const clipboardData = event.clipboardData.getData("text/plain");
+
+        if (!clipboardData.match(onlyNumbers)) return;
+
+        const dividedClipboardData = clipboardData.match(fourDigits);
+
+        const cardNumberHandlers = [setValue1, setValue2, setValue3, setValue4];
+
+        // TODO: bug with double paste of one digit number
+        for (const index in cardNumberHandlers) {
+            if (dividedClipboardData) {
+                cardNumberHandlers[index](dividedClipboardData[index]);
+            }
+        }
+    };
+
     const cardNumberRef = useRef<HTMLDivElement>(null);
 
     const isCardInput = (cardInput: any) => {
@@ -102,51 +138,6 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
         return () => document.removeEventListener("keydown", handleKey);
     }, []);
 
-    const [cardNumber1, setCardNumber1] = useState<string>("");
-    const [cardNumber2, setCardNumber2] = useState<string>("");
-    const [cardNumber3, setCardNumber3] = useState<string>("");
-    const [cardNumber4, setCardNumber4] = useState<string>("");
-
-    const cardNumberHandler = (
-        event: ChangeEvent<HTMLInputElement>,
-        setStateFunction: Dispatch<SetStateAction<string>>
-    ) => {
-        const value = event.target.value;
-        if (value.match(/^[0-9]*$/)) setStateFunction(value);
-    };
-
-    const cardNumber1Handler = (event: ChangeEvent<HTMLInputElement>) =>
-        cardNumberHandler(event, setCardNumber1);
-    const cardNumber2Handler = (event: ChangeEvent<HTMLInputElement>) =>
-        cardNumberHandler(event, setCardNumber2);
-    const cardNumber3Handler = (event: ChangeEvent<HTMLInputElement>) =>
-        cardNumberHandler(event, setCardNumber3);
-    const cardNumber4Handler = (event: ChangeEvent<HTMLInputElement>) =>
-        cardNumberHandler(event, setCardNumber4);
-
-    const handleOnPaste = (event: ClipboardEvent<HTMLInputElement>) => {
-        console.log("clipboardData", event.clipboardData.getData("text/plain"));
-
-        const clipboardData = event.clipboardData.getData("text/plain");
-
-        if (!clipboardData.match(/^[0-9]*$/)) return;
-
-        const dividedClipboardData = clipboardData.match(/.{1,4}/g);
-
-        const cardNumberHandlers = [
-            setCardNumber1,
-            setCardNumber2,
-            setCardNumber3,
-            setCardNumber4,
-        ];
-
-        for (const handler in cardNumberHandlers) {
-            if (dividedClipboardData) {
-                cardNumberHandlers[handler](dividedClipboardData[handler]);
-            }
-        }
-    };
-
     return (
         <fieldset className={styles["form-group"]}>
             <legend>{cardNumberInputLabel}</legend>
@@ -165,7 +156,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     id="cc-1"
                     onPaste={handleOnPaste}
                     required
-                    value={cardNumber1}
+                    value={value1}
                     onChange={cardNumber1Handler}
                 />
 
@@ -177,7 +168,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     id="cc-1"
                     onPaste={handleOnPaste}
                     required
-                    value={cardNumber2}
+                    value={value2}
                     onChange={cardNumber2Handler}
                 />
 
@@ -189,7 +180,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     id="cc-1"
                     onPaste={handleOnPaste}
                     required
-                    value={cardNumber3}
+                    value={value3}
                     onChange={cardNumber3Handler}
                 />
 
@@ -201,7 +192,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     id="cc-1"
                     onPaste={handleOnPaste}
                     required
-                    value={cardNumber4}
+                    value={value4}
                     onChange={cardNumber4Handler}
                 />
             </div>

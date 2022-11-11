@@ -1,5 +1,5 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FC, useMemo } from "react";
+import { Field, Form, Formik, FormikHelpers, useField } from "formik";
+import { ChangeEvent, ClipboardEvent, FC, useMemo } from "react";
 
 import { CreditCardInitialValuesType, CreditCardProps } from "./types";
 
@@ -9,6 +9,7 @@ import mastercard from "images/mastercard.svg";
 import visa from "images/visa.svg";
 
 import styles from "./CreditCard.module.scss";
+import { onlyNumbers, threeDigits } from "../../utils/patterns";
 
 const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber1: "",
@@ -16,8 +17,8 @@ const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber3: "",
     cardNumber4: "",
     cardHolderName: "",
-    expirationMonth: "",
-    expirationYear: "",
+    expirationMonth: "01",
+    expirationYear: new Date().getFullYear().toString(),
     ccvCode: "",
 };
 
@@ -138,20 +139,7 @@ const CreditCard: FC<CreditCardProps> = ({
                 <div className={styles["back"]}>
                     <div className={styles["stripe"]} />
 
-                    <div
-                        className={`${styles["form-group"]} ${styles["ccv-group"]}`}
-                    >
-                        <label htmlFor="ccv">ccv</label>
-
-                        <Field
-                            name="ccvCode"
-                            type="text"
-                            maxLength={3}
-                            id="ccv"
-                            className={styles["ccv-input"]}
-                            required
-                        />
-                    </div>
+                    <CcvCodeInput />
                 </div>
 
                 <button type="submit">submit</button>
@@ -161,3 +149,46 @@ const CreditCard: FC<CreditCardProps> = ({
 };
 
 export default CreditCard;
+
+export const CcvCodeInput = () => {
+    const [{ value }, , { setValue }] = useField("ccvCode");
+
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+
+        if (value.match(/^[0-9]*$/)) setValue(value);
+    };
+
+    const onPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+        const clipboardData = event.clipboardData.getData("text/plain");
+
+        if (!clipboardData.match(onlyNumbers)) return;
+
+        const dividedClipboardData = clipboardData.match(threeDigits);
+
+        console.log("three digits", dividedClipboardData);
+
+        // TODO: bug with double paste of one digit number
+        if (dividedClipboardData) {
+            setValue(dividedClipboardData[0]);
+        }
+    };
+
+    return (
+        <div className={`${styles["form-group"]} ${styles["ccv-group"]}`}>
+            <label htmlFor="ccv">ccv</label>
+
+            <Field
+                name="ccvCode"
+                type="text"
+                maxLength={3}
+                id="ccv"
+                className={styles["ccv-input"]}
+                required
+                value={value}
+                onChange={onChange}
+                onPaste={onPaste}
+            />
+        </div>
+    );
+};
