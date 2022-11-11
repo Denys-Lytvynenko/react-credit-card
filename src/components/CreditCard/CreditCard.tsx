@@ -1,5 +1,15 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FC, useMemo } from "react";
+import {
+    FC,
+    useEffect,
+    useMemo,
+    useRef,
+    ClipboardEvent,
+    useState,
+    ChangeEvent,
+    SetStateAction,
+    Dispatch,
+} from "react";
 
 import { CreditCardInitialValuesType, CreditCardProps } from "./types";
 
@@ -52,86 +62,137 @@ const CreditCard: FC<CreditCardProps> = ({
         return options;
     }, [expirationDateLimit]);
 
-    //
-    //     const isClosestParent = (input: any) => {
-    //         const parent = input?.closest("[data-card-number]");
+    const cardNumberRef = useRef<HTMLDivElement>(null);
 
-    //         return input.matches("input") && parent !== null;
-    //     };
+    const isCardInput = (cardInput: any) => {
+        return (
+            cardNumberRef.current &&
+            Array.from(cardNumberRef.current.childNodes).includes(cardInput) &&
+            cardInput.matches("input")
+        );
+    };
 
-    //     useEffect(() => {
-    //         const keyDownHandler = (event: any) => {
-    //             const input = event.target;
+    useEffect(() => {
+        const handleKey = (event: any) => {
+            const input = event.target;
 
-    //             if (!isClosestParent(input)) return;
+            if (!isCardInput(input)) return;
 
-    //             const prev = input.previousSibling;
-    //             const next = input.nextSibling;
+            const prev = input.previousSibling;
 
-    //             const key = event.key;
+            const next = input.nextSibling;
 
-    //             switch (key) {
-    //                 case "ArrowLeft":
-    //                     if (
-    //                         input.selectionStart === 0 &&
-    //                         input.selectionEnd === 0
-    //                     ) {
-    //                         if (prev) {
-    //                             prev.focus();
-    //                             prev.selectionStart = prev.value.length - 1;
-    //                             prev.selectionEnd = prev.value.length - 1;
-    //                         }
-    //                     }
-    //                     break;
+            const key = event.key;
 
-    //                 case "ArrowRight":
-    //                     if (
-    //                         input.selectionStart === input.value.length &&
-    //                         input.selectionEnd === input.value.length
-    //                     ) {
-    //                         if (next) {
-    //                             next.focus();
-    //                             next.selectionStart = 0;
-    //                             next.selectionEnd = 0;
-    //                         }
-    //                     }
-    //                     break;
+            switch (key) {
+                case "ArrowLeft":
+                    if (
+                        input.selectionStart === 0 &&
+                        input.selectionEnd === 0
+                    ) {
+                        if (prev) {
+                            prev.focus();
+                            prev.selectionStart = prev.value.length - 1;
+                            prev.selectionEnd = prev.value.length - 1;
+                        }
+                    }
+                    break;
 
-    //                 default:
-    //                     if (
-    //                         input.selectionStart === 4 &&
-    //                         input.selectionEnd === 4
-    //                     ) {
-    //                         /**
-    //                          * Focus next field if current is completed
-    //                          */
-    //                         if (next) {
-    //                             next.focus();
-    //                         }
-    //                     }
+                case "ArrowRight":
+                    if (
+                        input.selectionStart === input.value.length &&
+                        input.selectionEnd === input.value.length
+                    ) {
+                        if (next) {
+                            next.focus();
+                            next.selectionStart = 0;
+                            next.selectionEnd = 0;
+                        }
+                    }
+                    break;
 
-    //                     /**
-    //                      * Focus on the previous field on card number deletion
-    //                      */
-    //                     if (
-    //                         input.selectionStart === 0 &&
-    //                         input.selectionEnd === 0 &&
-    //                         key === "Backspace"
-    //                     ) {
-    //                         if (prev) prev.focus();
-    //                         prev.selectionStart = prev.value.length;
-    //                         prev.selectionEnd = prev.value.length;
-    //                     }
-    //                     break;
-    //             }
-    //         };
+                default:
+                    if (
+                        input.selectionStart === 4 &&
+                        input.selectionEnd === 4
+                    ) {
+                        /**
+                         * Focus next field if current is completed
+                         */
+                        if (next) {
+                            next.focus();
+                            next.selectionStart = 0;
+                            next.selectionEnd = 0;
+                        }
+                    }
 
-    //         document.addEventListener("keydown", keyDownHandler);
+                    /**
+                     * Focus on the previous field on card number deletion
+                     */
+                    if (
+                        input.selectionStart === 0 &&
+                        input.selectionEnd === 0 &&
+                        key === "Backspace"
+                    ) {
+                        if (prev) {
+                            prev.focus();
+                            prev.selectionStart = prev.value.length;
+                            prev.selectionEnd = prev.value.length;
+                        }
+                    }
+                    break;
+            }
+        };
 
-    //         return () => {
-    //             document.removeEventListener("keydown", keyDownHandler);
-    //         };
-    //     }, []);
+        document.addEventListener("keydown", handleKey);
+
+        return () => document.removeEventListener("keydown", handleKey);
+    }, []);
+
+    const [cardNumber1, setCardNumber1] = useState<string>("");
+    const [cardNumber2, setCardNumber2] = useState<string>("");
+    const [cardNumber3, setCardNumber3] = useState<string>("");
+    const [cardNumber4, setCardNumber4] = useState<string>("");
+
+    const cardNumberHandler = (
+        event: ChangeEvent<HTMLInputElement>,
+        setStateFunction: Dispatch<SetStateAction<string>>
+    ) => {
+        const value = event.target.value;
+        if (value.match(/^[0-9]*$/)) setStateFunction(value);
+    };
+
+    const cardNumber1Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setCardNumber1);
+    const cardNumber2Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setCardNumber2);
+    const cardNumber3Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setCardNumber3);
+    const cardNumber4Handler = (event: ChangeEvent<HTMLInputElement>) =>
+        cardNumberHandler(event, setCardNumber4);
+
+    const handleOnPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+        console.log("clipboardData", event.clipboardData.getData("text/plain"));
+
+        const clipboardData = event.clipboardData.getData("text/plain");
+
+        if (!clipboardData.match(/^[0-9]*$/)) return;
+
+        const dividedClipboardData = clipboardData.match(/.{1,4}/g);
+
+        const cardNumberHandlers = [
+            setCardNumber1,
+            setCardNumber2,
+            setCardNumber3,
+            setCardNumber4,
+        ];
+
+        for (const handler in cardNumberHandlers) {
+            if (dividedClipboardData) {
+                cardNumberHandlers[handler](dividedClipboardData[handler]);
+            }
+        }
+    };
 
     const submitForm = (
         values: CreditCardInitialValuesType,
@@ -162,7 +223,7 @@ const CreditCard: FC<CreditCardProps> = ({
 
                         <div
                             className={styles["horizontal-input-stack"]}
-                            data-card-number
+                            ref={cardNumberRef}
                         >
                             <Field
                                 name="cardNumber1"
@@ -170,7 +231,10 @@ const CreditCard: FC<CreditCardProps> = ({
                                 maxLength={4}
                                 aria-label="Credit card first 4 digits"
                                 id="cc-1"
+                                onPaste={handleOnPaste}
                                 required
+                                value={cardNumber1}
+                                onChange={cardNumber1Handler}
                             />
 
                             <Field
@@ -179,7 +243,10 @@ const CreditCard: FC<CreditCardProps> = ({
                                 maxLength={4}
                                 aria-label="Credit card second 4 digits"
                                 id="cc-1"
+                                onPaste={handleOnPaste}
                                 required
+                                value={cardNumber2}
+                                onChange={cardNumber2Handler}
                             />
 
                             <Field
@@ -188,7 +255,10 @@ const CreditCard: FC<CreditCardProps> = ({
                                 maxLength={4}
                                 aria-label="Credit card third 4 digits"
                                 id="cc-1"
+                                onPaste={handleOnPaste}
                                 required
+                                value={cardNumber3}
+                                onChange={cardNumber3Handler}
                             />
 
                             <Field
@@ -197,7 +267,10 @@ const CreditCard: FC<CreditCardProps> = ({
                                 maxLength={4}
                                 aria-label="Credit card last 4 digits"
                                 id="cc-1"
+                                onPaste={handleOnPaste}
                                 required
+                                value={cardNumber4}
+                                onChange={cardNumber4Handler}
                             />
                         </div>
                     </fieldset>
