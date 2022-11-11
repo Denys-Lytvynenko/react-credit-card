@@ -11,7 +11,7 @@ export type CreditCardProps = {
      * Card number label.
      * Default value is - "Card number"
      */
-    cardNumberLabel?: string;
+    cardNumberInputLabel?: string;
     /**
      * Number of years from current year to the expiration year.
      * (Credit cards expire every three to five years, depending on the issuer.).

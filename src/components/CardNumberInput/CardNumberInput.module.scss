@@ -1,0 +1,29 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    legend {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: -200vh;
+    }
+}
+
+.horizontal-input-stack {
+    display: flex;
+    gap: 0.5rem;
+
+    input {
+        font-family: "OCR A Std", monospace;
+        width: 4ch;
+    }
+}
