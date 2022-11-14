@@ -4,8 +4,6 @@ import { ChangeEvent, ClipboardEvent, FC, useEffect, useRef } from "react";
 import { CardNumberInputType } from "./types";
 import { fourDigits, onlyDigits } from "../../utils/patterns";
 
-import styles from "./CardNumberInput.module.scss";
-
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
         useField("cardNumber1");
@@ -41,11 +39,17 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
 
         const dividedClipboardData = clipboardData.match(fourDigits);
 
-        const cardNumberHandlers = [setValue1, setValue2, setValue3, setValue4];
+        if (dividedClipboardData !== null && dividedClipboardData.length > 1) {
+            event.preventDefault();
 
-        // TODO: bug with double paste of one digit number
-        for (const index in cardNumberHandlers) {
-            if (dividedClipboardData) {
+            const cardNumberHandlers = [
+                setValue1,
+                setValue2,
+                setValue3,
+                setValue4,
+            ];
+
+            for (let index = 0; index < dividedClipboardData.length; index++) {
                 cardNumberHandlers[index](dividedClipboardData[index]);
             }
         }
@@ -139,61 +143,58 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     }, []);
 
     return (
-        <fieldset className={styles["form-group"]}>
+        <fieldset className="form-group">
             <legend>{cardNumberInputLabel}</legend>
 
-            <label htmlFor="cc-1">Card number</label>
+            <label htmlFor="cc-1">{cardNumberInputLabel}</label>
 
-            <div
-                className={styles["horizontal-input-stack"]}
-                ref={cardNumberRef}
-            >
+            <div className="horizontal-input-stack" ref={cardNumberRef}>
                 <Field
                     name="cardNumber1"
                     type="text"
-                    maxLength={4}
-                    aria-label="Credit card first 4 digits"
                     id="cc-1"
-                    onPaste={handleOnPaste}
+                    aria-label="Credit card first 4 digits"
+                    maxLength={4}
                     required
                     value={value1}
                     onChange={cardNumber1Handler}
+                    onPaste={handleOnPaste}
                 />
 
                 <Field
                     name="cardNumber2"
                     type="text"
-                    maxLength={4}
-                    aria-label="Credit card second 4 digits"
                     id="cc-1"
-                    onPaste={handleOnPaste}
+                    aria-label="Credit card second 4 digits"
+                    maxLength={4}
                     required
                     value={value2}
                     onChange={cardNumber2Handler}
+                    onPaste={handleOnPaste}
                 />
 
                 <Field
                     name="cardNumber3"
                     type="text"
-                    maxLength={4}
-                    aria-label="Credit card third 4 digits"
                     id="cc-1"
-                    onPaste={handleOnPaste}
+                    aria-label="Credit card third 4 digits"
+                    maxLength={4}
                     required
                     value={value3}
                     onChange={cardNumber3Handler}
+                    onPaste={handleOnPaste}
                 />
 
                 <Field
                     name="cardNumber4"
                     type="text"
-                    maxLength={4}
-                    aria-label="Credit card last 4 digits"
                     id="cc-1"
-                    onPaste={handleOnPaste}
+                    aria-label="Credit card last 4 digits"
+                    maxLength={4}
                     required
                     value={value4}
                     onChange={cardNumber4Handler}
+                    onPaste={handleOnPaste}
                 />
             </div>
         </fieldset>

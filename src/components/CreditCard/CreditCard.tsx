@@ -1,16 +1,17 @@
-import { Field, Form, Formik, FormikHelpers, useField } from "formik";
-import { ChangeEvent, ClipboardEvent, FC, useMemo } from "react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { FC, useMemo } from "react";
 
 import { CreditCardInitialValuesType, CreditCardProps } from "./types";
-import { onlyDigits, threeDigits } from "../../utils/patterns";
 
 import CardNumberInput from "../CardNumberInput/CardNumberInput";
 
 import mastercard from "images/mastercard.svg";
-import visa from "images/visa.svg";
 import prostir from "images/prostir.svg";
+import visa from "images/visa.svg";
 
-import styles from "./CreditCard.module.scss";
+import { CcvCodeInput } from "../CcvCodeInput/CcvCodeInput";
+
+import "./CreditCard.scss";
 
 const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber1: "",
@@ -79,15 +80,15 @@ const CreditCard: FC<CreditCardProps> = ({
             initialValues={creditCardInitialValues}
             onSubmit={submitForm}
         >
-            <Form className={styles["credit-card"]}>
-                <div className={styles.front}>
-                    <div className={styles["card-data-row"]}>
-                        <div className={styles["brand-name"]}>{bankName}</div>
+            <Form className="credit-card">
+                <div className="front">
+                    <div className="card-data-row">
+                        <div className="brand-name">{bankName}</div>
 
                         <img
                             src={paymentSystemIcon}
                             alt="paymentSystemIcon"
-                            className={styles.logo}
+                            className="logo"
                         />
                     </div>
 
@@ -95,10 +96,8 @@ const CreditCard: FC<CreditCardProps> = ({
                         cardNumberInputLabel={cardNumberInputLabel}
                     />
 
-                    <div className={styles["input-row"]}>
-                        <div
-                            className={`${styles["form-group"]} ${styles["name-group"]} `}
-                        >
+                    <div className="input-row">
+                        <div className="form-group name-group">
                             <label htmlFor="name">Name</label>
 
                             <Field
@@ -109,12 +108,12 @@ const CreditCard: FC<CreditCardProps> = ({
                             />
                         </div>
 
-                        <fieldset className={`${styles["form-group"]}`}>
+                        <fieldset className="form-group">
                             <legend>Expiration</legend>
 
                             <label htmlFor="expiration-month">Expiration</label>
 
-                            <div className={styles["horizontal-input-stack"]}>
+                            <div className="horizontal-input-stack">
                                 <Field
                                     name="expirationMonth"
                                     as="select"
@@ -150,8 +149,8 @@ const CreditCard: FC<CreditCardProps> = ({
                     </div>
                 </div>
 
-                <div className={styles["back"]}>
-                    <div className={styles["stripe"]} />
+                <div className="back">
+                    <div className="stripe" />
 
                     <CcvCodeInput />
                 </div>
@@ -161,46 +160,3 @@ const CreditCard: FC<CreditCardProps> = ({
 };
 
 export default CreditCard;
-
-export const CcvCodeInput = () => {
-    const [{ value }, , { setValue }] = useField("ccvCode");
-
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-
-        if (value.match(onlyDigits)) setValue(value);
-    };
-
-    const onPaste = (event: ClipboardEvent<HTMLInputElement>) => {
-        const clipboardData = event.clipboardData.getData("text/plain");
-
-        if (!clipboardData.match(onlyDigits)) return;
-
-        const dividedClipboardData = clipboardData.match(threeDigits);
-
-        console.log("three digits", dividedClipboardData);
-
-        // TODO: bug with double paste of one digit number
-        if (dividedClipboardData) {
-            setValue(dividedClipboardData[0]);
-        }
-    };
-
-    return (
-        <div className={`${styles["form-group"]} ${styles["ccv-group"]}`}>
-            <label htmlFor="ccv">ccv</label>
-
-            <Field
-                name="ccvCode"
-                type="text"
-                maxLength={3}
-                id="ccv"
-                className={styles["ccv-input"]}
-                required
-                value={value}
-                onChange={onChange}
-                onPaste={onPaste}
-            />
-        </div>
-    );
-};
