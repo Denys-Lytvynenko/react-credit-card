@@ -18,6 +18,8 @@ const App = () => {
                 innerRef={formikRef}
                 bankName="VostokBank"
                 paymentSystem="prostir"
+                expirationDateLimit={25}
+                labelColor="black"
             />
 
             <button

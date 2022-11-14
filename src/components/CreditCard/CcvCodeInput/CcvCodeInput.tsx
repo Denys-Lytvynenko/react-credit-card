@@ -1,12 +1,10 @@
 import { useField, Field } from "formik";
 import { FC, ChangeEvent, ClipboardEvent } from "react";
 
-import { onlyDigits, threeDigits } from "../../utils/patterns";
+import { onlyDigits, threeDigits } from "../../../utils/patterns";
 import { CcvCodeInputType } from "./types";
 
-export const CcvCodeInput: FC<CcvCodeInputType> = ({
-    ccvCodeInputLabel = "ccv",
-}) => {
+const CcvCodeInput: FC<CcvCodeInputType> = ({ ccvCodeInputLabel = "ccv" }) => {
     const [{ value }, , { setValue }] = useField("ccvCode");
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,3 +45,5 @@ export const CcvCodeInput: FC<CcvCodeInputType> = ({
         </div>
     );
 };
+
+export default CcvCodeInput;

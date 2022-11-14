@@ -1,15 +1,17 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import { FC, useMemo } from "react";
 
 import { CreditCardInitialValuesType, CreditCardProps } from "./types";
 
-import CardNumberInput from "../CardNumberInput/CardNumberInput";
+import CardBackground from "./CardBackground/CardBackground";
+import CardHolderNameInput from "./CardHolderNameInput/CardHolderNameInput";
+import CardNumberInput from "./CardNumberInput/CardNumberInput";
+import CcvCodeInput from "./CcvCodeInput/CcvCodeInput";
+import Expiration from "./Expiration/Expiration";
 
 import mastercard from "images/mastercard.svg";
 import prostir from "images/prostir.svg";
 import visa from "images/visa.svg";
-
-import { CcvCodeInput } from "../CcvCodeInput/CcvCodeInput";
 
 import "./CreditCard.scss";
 
@@ -28,7 +30,8 @@ const CreditCard: FC<CreditCardProps> = ({
     bankName,
     paymentSystem,
     cardNumberInputLabel = "Card number",
-    expirationDateLimit = 3,
+    expirationDateLimit = 5,
+    labelColor = "white",
     innerRef = null,
 }) => {
     /**
@@ -47,25 +50,6 @@ const CreditCard: FC<CreditCardProps> = ({
         }
     }, [paymentSystem]);
 
-    /**
-     * Calculates options for the expiration year select field starting from current year and to the expiration date limit.
-     */
-    const yearsOptions = useMemo(() => {
-        let options: JSX.Element[] = [];
-
-        const currentYear = new Date().getFullYear();
-
-        for (let i = currentYear; i < currentYear + expirationDateLimit; i++) {
-            options.push(
-                <option value={i} key={i}>
-                    {i}
-                </option>
-            );
-        }
-
-        return options;
-    }, [expirationDateLimit]);
-
     const submitForm = (
         values: CreditCardInitialValuesType,
         helpers: FormikHelpers<CreditCardInitialValuesType>
@@ -80,8 +64,10 @@ const CreditCard: FC<CreditCardProps> = ({
             initialValues={creditCardInitialValues}
             onSubmit={submitForm}
         >
-            <Form className="credit-card">
+            <Form className="credit-card" style={{ color: labelColor }}>
                 <div className="front">
+                    <CardBackground accentColor="gray" />
+
                     <div className="card-data-row">
                         <div className="brand-name">{bankName}</div>
 
@@ -97,59 +83,15 @@ const CreditCard: FC<CreditCardProps> = ({
                     />
 
                     <div className="input-row">
-                        <div className="form-group name-group">
-                            <label htmlFor="name">Name</label>
+                        <CardHolderNameInput />
 
-                            <Field
-                                name="cardHolderName"
-                                type="text"
-                                id="name"
-                                required
-                            />
-                        </div>
-
-                        <fieldset className="form-group">
-                            <legend>Expiration</legend>
-
-                            <label htmlFor="expiration-month">Expiration</label>
-
-                            <div className="horizontal-input-stack">
-                                <Field
-                                    name="expirationMonth"
-                                    as="select"
-                                    id="expiration-month"
-                                    aria-label="Expiration Month"
-                                    required
-                                >
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                    <option value="04">04</option>
-                                    <option value="05">05</option>
-                                    <option value="06">06</option>
-                                    <option value="07">07</option>
-                                    <option value="08">08</option>
-                                    <option value="09">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </Field>
-
-                                <Field
-                                    name="expirationYear"
-                                    as="select"
-                                    id="expiration-year"
-                                    aria-label="Expiration year"
-                                    required
-                                >
-                                    {yearsOptions}
-                                </Field>
-                            </div>
-                        </fieldset>
+                        <Expiration expirationDateLimit={expirationDateLimit} />
                     </div>
                 </div>
 
                 <div className="back">
+                    <CardBackground solid accentColor="gray" />
+
                     <div className="stripe" />
 
                     <CcvCodeInput />

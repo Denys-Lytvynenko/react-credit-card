@@ -22,6 +22,11 @@ export type CreditCardProps = {
      * Default value is - 3 years.
      */
     expirationDateLimit?: number;
+    /**
+     * Set label color.
+     * Default value is - "white"
+     */
+    labelColor?: string;
 };
 
 export type CreditCardInitialValuesType = {

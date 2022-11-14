@@ -2,7 +2,7 @@ import { Field, useField } from "formik";
 import { ChangeEvent, ClipboardEvent, FC, useEffect, useRef } from "react";
 
 import { CardNumberInputType } from "./types";
-import { fourDigits, onlyDigits } from "../../utils/patterns";
+import { fourDigits, onlyDigits } from "../../../utils/patterns";
 
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
