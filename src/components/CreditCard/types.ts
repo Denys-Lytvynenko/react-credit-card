@@ -6,7 +6,11 @@ export type CreditCardProps = {
     /**
      * Payment system
      */
-    paymentSystem: "visa" | "mastercard";
+    paymentSystem: "visa" | "mastercard" | "prostir";
+    /**
+     * Inner ref to get formik values and helpers from the outside credit card component
+     */
+    innerRef: React.RefObject<any> | null;
     /**
      * Card number label.
      * Default value is - "Card number"

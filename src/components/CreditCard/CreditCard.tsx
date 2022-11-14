@@ -2,14 +2,15 @@ import { Field, Form, Formik, FormikHelpers, useField } from "formik";
 import { ChangeEvent, ClipboardEvent, FC, useMemo } from "react";
 
 import { CreditCardInitialValuesType, CreditCardProps } from "./types";
+import { onlyDigits, threeDigits } from "../../utils/patterns";
 
 import CardNumberInput from "../CardNumberInput/CardNumberInput";
 
 import mastercard from "images/mastercard.svg";
 import visa from "images/visa.svg";
+import prostir from "images/prostir.svg";
 
 import styles from "./CreditCard.module.scss";
-import { onlyNumbers, threeDigits } from "../../utils/patterns";
 
 const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber1: "",
@@ -27,14 +28,23 @@ const CreditCard: FC<CreditCardProps> = ({
     paymentSystem,
     cardNumberInputLabel = "Card number",
     expirationDateLimit = 3,
+    innerRef = null,
 }) => {
     /**
      * Depending from payment system shows appropriate emblem in the top right corner of the card.
      */
-    const paymentSystemIcon = useMemo(
-        () => (paymentSystem === "visa" ? visa : mastercard),
-        [paymentSystem]
-    );
+    const paymentSystemIcon = useMemo(() => {
+        switch (paymentSystem) {
+            case "visa":
+                return visa;
+            case "mastercard":
+                return mastercard;
+            case "prostir":
+                return prostir;
+            default:
+                break;
+        }
+    }, [paymentSystem]);
 
     /**
      * Calculates options for the expiration year select field starting from current year and to the expiration date limit.
@@ -64,7 +74,11 @@ const CreditCard: FC<CreditCardProps> = ({
     };
 
     return (
-        <Formik initialValues={creditCardInitialValues} onSubmit={submitForm}>
+        <Formik
+            innerRef={innerRef}
+            initialValues={creditCardInitialValues}
+            onSubmit={submitForm}
+        >
             <Form className={styles["credit-card"]}>
                 <div className={styles.front}>
                     <div className={styles["card-data-row"]}>
@@ -141,8 +155,6 @@ const CreditCard: FC<CreditCardProps> = ({
 
                     <CcvCodeInput />
                 </div>
-
-                <button type="submit">submit</button>
             </Form>
         </Formik>
     );
@@ -156,13 +168,13 @@ export const CcvCodeInput = () => {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
 
-        if (value.match(/^[0-9]*$/)) setValue(value);
+        if (value.match(onlyDigits)) setValue(value);
     };
 
     const onPaste = (event: ClipboardEvent<HTMLInputElement>) => {
         const clipboardData = event.clipboardData.getData("text/plain");
 
-        if (!clipboardData.match(onlyNumbers)) return;
+        if (!clipboardData.match(onlyDigits)) return;
 
         const dividedClipboardData = clipboardData.match(threeDigits);
 

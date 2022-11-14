@@ -2,9 +2,9 @@ import { Field, useField } from "formik";
 import { ChangeEvent, ClipboardEvent, FC, useEffect, useRef } from "react";
 
 import { CardNumberInputType } from "./types";
+import { fourDigits, onlyDigits } from "../../utils/patterns";
 
 import styles from "./CardNumberInput.module.scss";
-import { fourDigits, onlyNumbers } from "../../utils/patterns";
 
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
@@ -22,7 +22,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     ) => {
         const value = event.target.value;
 
-        if (value.match(onlyNumbers)) setStateFunction(value);
+        if (value.match(onlyDigits)) setStateFunction(value);
     };
 
     const cardNumber1Handler = (event: ChangeEvent<HTMLInputElement>) =>
@@ -37,7 +37,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const handleOnPaste = (event: ClipboardEvent<HTMLInputElement>) => {
         const clipboardData = event.clipboardData.getData("text/plain");
 
-        if (!clipboardData.match(onlyNumbers)) return;
+        if (!clipboardData.match(onlyDigits)) return;
 
         const dividedClipboardData = clipboardData.match(fourDigits);
 
