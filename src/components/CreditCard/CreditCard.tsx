@@ -43,8 +43,6 @@ const CreditCard: FC<CreditCardProps> = ({
                 return visa;
             case "mastercard":
                 return mastercard;
-            case "prostir":
-                return prostir;
             default:
                 break;
         }

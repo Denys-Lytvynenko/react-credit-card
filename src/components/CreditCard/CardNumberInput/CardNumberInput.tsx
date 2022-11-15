@@ -1,8 +1,18 @@
 import { Field, useField } from "formik";
-import { ChangeEvent, ClipboardEvent, FC, useEffect, useRef } from "react";
+import {
+    ChangeEvent,
+    ClipboardEvent,
+    FC,
+    useEffect,
+    useRef,
+    KeyboardEvent,
+    KeyboardEventHandler,
+} from "react";
 
 import { CardNumberInputType } from "./types";
+import { fetchData } from "../../../api/fetchData";
 import { fourDigits, onlyDigits } from "../../../utils/patterns";
+import { BINCheckResponseTypes } from "../../../api/types";
 
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
@@ -13,6 +23,22 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
         useField("cardNumber3");
     const [{ value: value4 }, , { setValue: setValue4 }] =
         useField("cardNumber4");
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        if (value1.length === 4) {
+            fetchData<BINCheckResponseTypes>(
+                "https://lookup.binlist.net/",
+                value1,
+                controller.signal
+            )
+                .then((data) => console.log("Data", data.scheme))
+                .catch((e) => console.error(e));
+        }
+
+        return () => controller.abort();
+    }, [value1]);
 
     const cardNumberHandler = (
         event: ChangeEvent<HTMLInputElement>,
@@ -55,92 +81,72 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
         }
     };
 
-    const cardNumberRef = useRef<HTMLDivElement>(null);
+    const handleKey: KeyboardEventHandler<HTMLInputElement> = (event) => {
+        const input = event.currentTarget;
 
-    const isCardInput = (cardInput: any) => {
-        return (
-            cardNumberRef.current &&
-            Array.from(cardNumberRef.current.childNodes).includes(cardInput) &&
-            cardInput.matches("input")
-        );
-    };
+        const prev = input.previousSibling as HTMLInputElement | null;
 
-    useEffect(() => {
-        const handleKey = (event: any) => {
-            const input = event.target;
+        const next = input.nextSibling as HTMLInputElement | null;
 
-            if (!isCardInput(input)) return;
+        const key = event.key;
 
-            const prev = input.previousSibling;
-
-            const next = input.nextSibling;
-
-            const key = event.key;
-
-            switch (key) {
-                case "ArrowLeft":
-                    if (
-                        input.selectionStart === 0 &&
-                        input.selectionEnd === 0
-                    ) {
-                        if (prev) {
-                            prev.focus();
-                            prev.selectionStart = prev.value.length - 1;
-                            prev.selectionEnd = prev.value.length - 1;
-                        }
+        switch (key) {
+            case "ArrowLeft":
+                if (input.selectionStart === 0 && input.selectionEnd === 0) {
+                    if (prev) {
+                        prev.focus();
+                        prev.selectionStart = prev.value.length - 1;
+                        prev.selectionEnd = prev.value.length - 1;
                     }
-                    break;
+                }
+                break;
 
-                case "ArrowRight":
-                    if (
-                        input.selectionStart === input.value.length &&
-                        input.selectionEnd === input.value.length
-                    ) {
-                        if (next) {
-                            next.focus();
-                            next.selectionStart = 0;
-                            next.selectionEnd = 0;
-                        }
+            case "ArrowRight":
+                if (
+                    input.selectionStart === input.value.length &&
+                    input.selectionEnd === input.value.length
+                ) {
+                    if (next) {
+                        next.focus();
+                        next.selectionStart = 0;
+                        next.selectionEnd = 0;
                     }
-                    break;
+                }
+                break;
 
-                default:
-                    if (
-                        input.selectionStart === 4 &&
-                        input.selectionEnd === 4
-                    ) {
-                        /**
-                         * Focus next field if current is completed
-                         */
-                        if (next) {
-                            next.focus();
-                            next.selectionStart = 0;
-                            next.selectionEnd = 0;
-                        }
-                    }
-
+            default:
+                if (
+                    input.selectionStart === 4 &&
+                    input.selectionEnd === 4 &&
+                    key !== "Backspace"
+                ) {
                     /**
-                     * Focus on the previous field on card number deletion
+                     * Focus next field if current is completed
                      */
-                    if (
-                        input.selectionStart === 0 &&
-                        input.selectionEnd === 0 &&
-                        key === "Backspace"
-                    ) {
-                        if (prev) {
-                            prev.focus();
-                            prev.selectionStart = prev.value.length;
-                            prev.selectionEnd = prev.value.length;
-                        }
+                    if (next) {
+                        next.focus();
+                        next.selectionStart = 0;
+                        next.selectionEnd = 0;
                     }
-                    break;
-            }
-        };
+                }
 
-        document.addEventListener("keydown", handleKey);
-
-        return () => document.removeEventListener("keydown", handleKey);
-    }, []);
+                /**
+                 * Focus on the previous field on card number deletion
+                 */
+                if (
+                    input.selectionStart === 0 &&
+                    input.selectionEnd === 0 &&
+                    key === "Backspace"
+                ) {
+                    if (prev) {
+                        prev.focus();
+                        prev.selectionStart = prev.value.length;
+                        prev.selectionEnd = prev.value.length;
+                    }
+                }
+                break;
+        }
+    };
 
     return (
         <fieldset className="form-group">
@@ -148,7 +154,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
 
             <label htmlFor="cc-1">{cardNumberInputLabel}</label>
 
-            <div className="horizontal-input-stack" ref={cardNumberRef}>
+            <div className="horizontal-input-stack">
                 <Field
                     name="cardNumber1"
                     type="text"
@@ -159,6 +165,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     value={value1}
                     onChange={cardNumber1Handler}
                     onPaste={handleOnPaste}
+                    onKeyDown={handleKey}
                 />
 
                 <Field
@@ -171,6 +178,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     value={value2}
                     onChange={cardNumber2Handler}
                     onPaste={handleOnPaste}
+                    onKeyDown={handleKey}
                 />
 
                 <Field
@@ -183,6 +191,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     value={value3}
                     onChange={cardNumber3Handler}
                     onPaste={handleOnPaste}
+                    onKeyDown={handleKey}
                 />
 
                 <Field
@@ -195,6 +204,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     value={value4}
                     onChange={cardNumber4Handler}
                     onPaste={handleOnPaste}
+                    onKeyDown={handleKey}
                 />
             </div>
         </fieldset>

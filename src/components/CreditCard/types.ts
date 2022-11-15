@@ -6,7 +6,7 @@ export type CreditCardProps = {
     /**
      * Payment system
      */
-    paymentSystem: "visa" | "mastercard" | "prostir";
+    paymentSystem: "visa" | "mastercard";
     /**
      * Inner ref to get formik values and helpers from the outside credit card component
      */
