@@ -10,7 +10,6 @@ import CcvCodeInput from "./CcvCodeInput/CcvCodeInput";
 import Expiration from "./Expiration/Expiration";
 
 import mastercard from "images/mastercard.svg";
-import prostir from "images/prostir.svg";
 import visa from "images/visa.svg";
 
 import "./CreditCard.scss";

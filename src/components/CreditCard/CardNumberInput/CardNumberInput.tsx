@@ -3,16 +3,14 @@ import {
     ChangeEvent,
     ClipboardEvent,
     FC,
-    useEffect,
-    useRef,
-    KeyboardEvent,
     KeyboardEventHandler,
+    useEffect,
 } from "react";
 
-import { CardNumberInputType } from "./types";
 import { fetchData } from "../../../api/fetchData";
-import { fourDigits, onlyDigits } from "../../../utils/patterns";
 import { BINCheckResponseTypes } from "../../../api/types";
+import { fourDigits, onlyDigits } from "../../../utils/patterns";
+import { CardNumberInputType } from "./types";
 
 const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
