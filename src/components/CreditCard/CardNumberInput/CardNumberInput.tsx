@@ -106,7 +106,10 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
 
         switch (key) {
             case "ArrowLeft":
-                if (input.selectionStart === 1 && input.selectionEnd === 1) {
+                if (
+                    (input.selectionStart === 1 && input.selectionEnd === 1) ||
+                    (input.selectionStart === 0 && input.selectionEnd === 0)
+                ) {
                     if (prev) {
                         event.preventDefault();
                         prev.focus();
@@ -124,8 +127,13 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     if (next) {
                         event.preventDefault();
                         next.focus();
-                        next.selectionStart = 1;
-                        next.selectionEnd = 1;
+                        if (next.value.length) {
+                            next.selectionStart = 1;
+                            next.selectionEnd = 1;
+                        } else {
+                            next.selectionStart = 0;
+                            next.selectionEnd = 0;
+                        }
                     }
                 }
                 break;
