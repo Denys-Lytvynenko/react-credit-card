@@ -1,9 +1,11 @@
-import { Field } from "formik";
+import { Field, useField } from "formik";
 import { FC, useMemo } from "react";
 
 import { ExpirationType } from "./types";
 
 const Expiration: FC<ExpirationType> = ({ expirationDateLimit }) => {
+    const [{ value }] = useField<HTMLSelectElement>("expirationYear");
+
     /**
      * Calculates options for the expiration year select field starting from current year and to the expiration date limit.
      */
@@ -23,6 +25,43 @@ const Expiration: FC<ExpirationType> = ({ expirationDateLimit }) => {
         return options;
     }, [expirationDateLimit]);
 
+    /**
+     * Calculates options for the expiration month select field depending from selected year.
+     * If selected year equal to current year month options start from current month and to the end of current year.
+     * If selected year different from current year month options start from 01 to 12.
+     */
+    const monthOptions = useMemo(() => {
+        let options: JSX.Element[] = [];
+
+        const optionCreator = (i: number): void => {
+            let optionValue;
+
+            if (i.toString().length < 2) {
+                optionValue = "0" + i;
+            } else {
+                optionValue = i;
+            }
+
+            options.push(
+                <option value={optionValue} key={optionValue}>
+                    {optionValue}
+                </option>
+            );
+        };
+
+        if (value.toString() === new Date().getFullYear().toString()) {
+            for (let i = new Date().getMonth() + 1; i <= 12; i++) {
+                optionCreator(i);
+            }
+        } else {
+            for (let i = 1; i <= 12; i++) {
+                optionCreator(i);
+            }
+        }
+
+        return options;
+    }, [value]);
+
     return (
         <fieldset className="form-group">
             <legend>Expiration</legend>
@@ -37,18 +76,7 @@ const Expiration: FC<ExpirationType> = ({ expirationDateLimit }) => {
                     aria-label="Expiration Month"
                     required
                 >
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
+                    {monthOptions}
                 </Field>
 
                 <Field

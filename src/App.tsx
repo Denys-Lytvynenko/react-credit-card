@@ -17,7 +17,7 @@ const App = () => {
             <CreditCard
                 innerRef={formikRef}
                 bankName="VostokBank"
-                expirationDateLimit={25}
+                expirationDateLimit={10}
                 labelColor="black"
             />
 

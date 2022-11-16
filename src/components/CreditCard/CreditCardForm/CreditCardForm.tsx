@@ -16,7 +16,7 @@ const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber3: "",
     cardNumber4: "",
     cardHolderName: "",
-    expirationMonth: "01",
+    expirationMonth: (new Date().getMonth() + 1).toString(),
     expirationYear: new Date().getFullYear().toString(),
     ccvCode: "",
 };
