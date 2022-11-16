@@ -4,10 +4,6 @@ export type CreditCardProps = {
      */
     bankName: string;
     /**
-     * Payment system
-     */
-    paymentSystem: "visa" | "mastercard";
-    /**
      * Inner ref to get formik values and helpers from the outside credit card component
      */
     innerRef: React.RefObject<any> | null;

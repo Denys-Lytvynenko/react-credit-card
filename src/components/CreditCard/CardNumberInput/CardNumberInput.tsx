@@ -4,11 +4,14 @@ import {
     ClipboardEvent,
     FC,
     KeyboardEventHandler,
+    useContext,
     useEffect,
 } from "react";
 
 import { fetchData } from "../../../api/fetchData";
 import { BINCheckResponseTypes } from "../../../api/types";
+import { CardContext } from "../../../context/CardContext";
+import { ACTION_TYPES } from "../../../context/reducer";
 import { fourDigits, onlyDigits } from "../../../utils/patterns";
 import { CardNumberInputType } from "./types";
 
@@ -22,21 +25,34 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
     const [{ value: value4 }, , { setValue: setValue4 }] =
         useField("cardNumber4");
 
+    const { dispatch } = useContext(CardContext);
+
+    const BIN = value1 + value2;
+
     useEffect(() => {
         const controller = new AbortController();
 
-        if (value1.length === 4) {
+        if (4 <= BIN.length && BIN.length <= 6) {
             fetchData<BINCheckResponseTypes>(
                 "https://lookup.binlist.net/",
-                value1,
+                BIN,
                 controller.signal
             )
-                .then((data) => console.log("Data", data.scheme))
+                .then((data) => {
+                    console.log("Data", data.scheme);
+                    if (data.scheme !== null) {
+                        dispatch<string>({
+                            type: ACTION_TYPES.CHANGE_PAYMENT_SYSTEM,
+                            payload: data.scheme,
+                        });
+                    }
+                })
+
                 .catch((e) => console.error(e));
         }
 
         return () => controller.abort();
-    }, [value1]);
+    }, [BIN, dispatch]);
 
     const cardNumberHandler = (
         event: ChangeEvent<HTMLInputElement>,
@@ -90,11 +106,12 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
 
         switch (key) {
             case "ArrowLeft":
-                if (input.selectionStart === 0 && input.selectionEnd === 0) {
+                if (input.selectionStart === 1 && input.selectionEnd === 1) {
                     if (prev) {
+                        event.preventDefault();
                         prev.focus();
-                        prev.selectionStart = prev.value.length - 1;
-                        prev.selectionEnd = prev.value.length - 1;
+                        prev.selectionStart = prev.value.length;
+                        prev.selectionEnd = prev.value.length;
                     }
                 }
                 break;
@@ -105,9 +122,10 @@ const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
                     input.selectionEnd === input.value.length
                 ) {
                     if (next) {
+                        event.preventDefault();
                         next.focus();
-                        next.selectionStart = 0;
-                        next.selectionEnd = 0;
+                        next.selectionStart = 1;
+                        next.selectionEnd = 1;
                     }
                 }
                 break;

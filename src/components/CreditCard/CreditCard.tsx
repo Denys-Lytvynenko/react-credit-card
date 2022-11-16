@@ -1,101 +1,16 @@
-import { Form, Formik, FormikHelpers } from "formik";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
-import { CreditCardInitialValuesType, CreditCardProps } from "./types";
+import { CreditCardProps } from "./types";
 
-import CardBackground from "./CardBackground/CardBackground";
-import CardHolderNameInput from "./CardHolderNameInput/CardHolderNameInput";
-import CardNumberInput from "./CardNumberInput/CardNumberInput";
-import CcvCodeInput from "./CcvCodeInput/CcvCodeInput";
-import Expiration from "./Expiration/Expiration";
-
-import mastercard from "images/mastercard.svg";
-import visa from "images/visa.svg";
+import CardContextProvider from "../../context/CardContext";
+import CreditCardForm from "./CreditCardForm/CreditCardForm";
 
 import "./CreditCard.scss";
 
-const creditCardInitialValues: CreditCardInitialValuesType = {
-    cardNumber1: "",
-    cardNumber2: "",
-    cardNumber3: "",
-    cardNumber4: "",
-    cardHolderName: "",
-    expirationMonth: "01",
-    expirationYear: new Date().getFullYear().toString(),
-    ccvCode: "",
-};
-
-const CreditCard: FC<CreditCardProps> = ({
-    bankName,
-    paymentSystem,
-    cardNumberInputLabel = "Card number",
-    expirationDateLimit = 5,
-    labelColor = "white",
-    innerRef = null,
-}) => {
-    /**
-     * Depending from payment system shows appropriate emblem in the top right corner of the card.
-     */
-    const paymentSystemIcon = useMemo(() => {
-        switch (paymentSystem) {
-            case "visa":
-                return visa;
-            case "mastercard":
-                return mastercard;
-            default:
-                break;
-        }
-    }, [paymentSystem]);
-
-    const submitForm = (
-        values: CreditCardInitialValuesType,
-        helpers: FormikHelpers<CreditCardInitialValuesType>
-    ) => {
-        console.log("Form values", values);
-        console.log("Form helpers", helpers);
-    };
-
-    return (
-        <Formik
-            innerRef={innerRef}
-            initialValues={creditCardInitialValues}
-            onSubmit={submitForm}
-        >
-            <Form className="credit-card" style={{ color: labelColor }}>
-                <div className="front">
-                    <CardBackground accentColor="gray" />
-
-                    <div className="card-data-row">
-                        <div className="brand-name">{bankName}</div>
-
-                        <img
-                            src={paymentSystemIcon}
-                            alt="paymentSystemIcon"
-                            className="logo"
-                        />
-                    </div>
-
-                    <CardNumberInput
-                        cardNumberInputLabel={cardNumberInputLabel}
-                    />
-
-                    <div className="input-row">
-                        <CardHolderNameInput />
-
-                        <Expiration expirationDateLimit={expirationDateLimit} />
-                    </div>
-                </div>
-
-                <div className="back">
-                    <CardBackground solid accentColor="gray" />
-
-                    <div className="stripe" />
-
-                    <CcvCodeInput />
-                </div>
-            </Form>
-        </Formik>
-    );
-};
+const CreditCard: FC<CreditCardProps> = (props) => (
+    <CardContextProvider>
+        <CreditCardForm {...props} />
+    </CardContextProvider>
+);
 
 export default CreditCard;
