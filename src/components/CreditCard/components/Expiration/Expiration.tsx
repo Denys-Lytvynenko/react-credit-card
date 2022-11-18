@@ -3,7 +3,10 @@ import { FC, useMemo } from "react";
 
 import { ExpirationType } from "./types";
 
-const Expiration: FC<ExpirationType> = ({ expirationDateLimit }) => {
+const Expiration: FC<ExpirationType> = ({
+    expirationDateLimitLabel = "Expiration",
+    expirationDateLimit = 5,
+}) => {
     const [{ value }] = useField<HTMLSelectElement>("expirationYear");
 
     /**
@@ -64,9 +67,9 @@ const Expiration: FC<ExpirationType> = ({ expirationDateLimit }) => {
 
     return (
         <fieldset className="form-group">
-            <legend>Expiration</legend>
+            <legend>{expirationDateLimitLabel}</legend>
 
-            <label htmlFor="expiration-month">Expiration</label>
+            <label htmlFor="expiration-month">{expirationDateLimitLabel}</label>
 
             <div className="horizontal-input-stack">
                 <Field

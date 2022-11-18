@@ -13,6 +13,21 @@ export type CreditCardProps = {
      */
     cardNumberInputLabel?: string;
     /**
+     * Cardholder name input label.
+     * Default value is - "Name"
+     */
+    cardHolderNameInputLabel?: string;
+    /**
+     * Expiration date limit label.
+     * Default value is - "Expiration"
+     */
+    expirationDateLimitLabel?: string;
+    /**
+     * CCV code input label.
+     * Default value is - "CCV"
+     */
+    ccvCodeInputLabel?: string;
+    /**
      * Number of years from current year to the expiration year.
      * (Credit cards expire every three to five years, depending on the issuer.).
      * Default value is - 3 years.

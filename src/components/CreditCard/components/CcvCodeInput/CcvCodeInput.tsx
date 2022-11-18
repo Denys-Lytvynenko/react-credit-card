@@ -1,7 +1,7 @@
 import { useField, Field } from "formik";
 import { FC, ChangeEvent, ClipboardEvent } from "react";
 
-import { onlyDigits, threeDigits } from "../../../utils/patterns";
+import { onlyDigits, threeDigits } from "../../utils/patterns";
 import { CcvCodeInputType } from "./types";
 
 const CcvCodeInput: FC<CcvCodeInputType> = ({ ccvCodeInputLabel = "ccv" }) => {

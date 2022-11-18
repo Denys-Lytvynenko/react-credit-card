@@ -1,11 +1,11 @@
 import { Field, useField } from "formik";
 import { ChangeEvent, FC } from "react";
 
-import { onlyLetters } from "../../../utils/patterns";
+import { onlyLetters } from "../../utils/patterns";
 import { CardHolderNameInputType } from "./types";
 
 const CardHolderNameInput: FC<CardHolderNameInputType> = ({
-    cardHolderNameInputLabel = "Name",
+    cardHolderNameInputLabel = "Cardholder name",
 }) => {
     const [{ value }, , { setValue }] = useField("cardHolderName");
 

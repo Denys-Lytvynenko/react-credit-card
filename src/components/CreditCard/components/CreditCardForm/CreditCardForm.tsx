@@ -1,7 +1,7 @@
 import { Form, Formik, FormikHelpers } from "formik";
 import { FC } from "react";
 
-import { CreditCardInitialValuesType, CreditCardProps } from "../types";
+import { CreditCardInitialValuesType, CreditCardProps } from "../../types";
 
 import CardBackground from "../CardBackground/CardBackground";
 import CardHolderNameInput from "../CardHolderNameInput/CardHolderNameInput";
@@ -23,8 +23,11 @@ const creditCardInitialValues: CreditCardInitialValuesType = {
 
 const CreditCardForm: FC<CreditCardProps> = ({
     bankName,
-    cardNumberInputLabel = "Card number",
-    expirationDateLimit = 5,
+    cardNumberInputLabel,
+    cardHolderNameInputLabel,
+    expirationDateLimitLabel,
+    expirationDateLimit,
+    ccvCodeInputLabel,
     labelColor = "white",
     innerRef = null,
 }) => {
@@ -57,9 +60,14 @@ const CreditCardForm: FC<CreditCardProps> = ({
                     />
 
                     <div className="input-row">
-                        <CardHolderNameInput />
+                        <CardHolderNameInput
+                            cardHolderNameInputLabel={cardHolderNameInputLabel}
+                        />
 
-                        <Expiration expirationDateLimit={expirationDateLimit} />
+                        <Expiration
+                            expirationDateLimitLabel={expirationDateLimitLabel}
+                            expirationDateLimit={expirationDateLimit}
+                        />
                     </div>
                 </div>
 
@@ -68,7 +76,7 @@ const CreditCardForm: FC<CreditCardProps> = ({
 
                     <div className="stripe" />
 
-                    <CcvCodeInput />
+                    <CcvCodeInput ccvCodeInputLabel={ccvCodeInputLabel} />
                 </div>
             </Form>
         </Formik>

@@ -8,14 +8,16 @@ import {
     useEffect,
 } from "react";
 
-import { fetchData } from "../../../api/fetchData";
-import { BINCheckResponseTypes } from "../../../api/types";
-import { CardContext } from "../../../context/CardContext";
-import { ACTION_TYPES } from "../../../context/reducer";
-import { fourDigits, onlyDigits } from "../../../utils/patterns";
+import { fetchData } from "../../api/fetchData";
+import { BINCheckResponseTypes } from "../../api/types";
+import { CardContext } from "../../context/CardContext";
+import { ACTION_TYPES } from "../../context/reducer";
+import { fourDigits, onlyDigits } from "../../utils/patterns";
 import { CardNumberInputType } from "./types";
 
-const CardNumberInput: FC<CardNumberInputType> = ({ cardNumberInputLabel }) => {
+const CardNumberInput: FC<CardNumberInputType> = ({
+    cardNumberInputLabel = "Card number",
+}) => {
     const [{ value: value1 }, , { setValue: setValue1 }] =
         useField("cardNumber1");
     const [{ value: value2 }, , { setValue: setValue2 }] =

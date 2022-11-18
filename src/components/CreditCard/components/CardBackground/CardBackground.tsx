@@ -7,13 +7,19 @@ import "./CardBackground.scss";
 const CardBackground: FC<CardBackgroundType> = ({
     accentColor = "#AAAAAA",
     solid,
+    customBG,
 }) => {
     return (
         <>
-            {solid ? (
+            {solid || customBG ? (
                 <div
                     className="card-background"
-                    style={{ backgroundColor: accentColor }}
+                    style={{
+                        backgroundColor: accentColor,
+                        backgroundImage: `url(${customBG})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center center",
+                    }}
                 />
             ) : (
                 <svg

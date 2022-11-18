@@ -1,11 +1,11 @@
 import { FC, useContext, useMemo } from "react";
-import { CardContext } from "../../../context/CardContext";
+import { CardContext } from "../../context/CardContext";
 
-import amex from "images/amex.svg";
-import discover from "images/discover.svg";
-import mastercard from "images/mastercard.svg";
-import unionpay from "images/unionpay.svg";
-import visa from "images/visa.svg";
+import amex from "../../images/amex.svg";
+import discover from "../../images/discover.svg";
+import mastercard from "../../images/mastercard.svg";
+import unionpay from "../../images/unionpay.svg";
+import visa from "../../images/visa.svg";
 
 const paymentSystemIcons: { [key: string]: string } = {
     amex,
@@ -35,7 +35,9 @@ const CardLogo: FC = () => {
                     alt="paymentSystemIcon"
                     className="logo"
                 />
-            ) : null}
+            ) : (
+                <div className="logo" />
+            )}
         </>
     );
 };
