@@ -1,0 +1,10 @@
+@import "../../variables.scss";
+
+.name-group {
+    flex-grow: 1;
+
+    input {
+        font-family: $cardFontFamily;
+        text-transform: uppercase;
+    }
+}

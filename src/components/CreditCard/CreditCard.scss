@@ -8,7 +8,6 @@
 .credit-card {
     font-family: Arial;
     position: relative;
-    box-sizing: border-box;
 
     .front,
     .back {
@@ -36,13 +35,7 @@
         margin-bottom: auto;
     }
 
-    .logo {
-        width: 50px;
-        height: 40px;
-        flex-grow: 0;
-    }
-
-    .credit-card .brand-name {
+    .brand-name {
         flex-grow: 1;
         font-size: 1.25rem;
         font-weight: bold;
@@ -68,41 +61,15 @@
         }
     }
 
-    .horizontal-input-stack {
-        display: flex;
-        gap: 0.5rem;
-
-        input {
-            font-family: "OCR A Std", monospace;
-            width: 4ch;
-        }
-    }
-
-    input,
-    select {
-        padding: 0.25em 0.5em;
-        border: none;
-        border-radius: 0.25em;
-        appearance: none;
-    }
-
     label {
         font-size: 0.65rem;
+        padding: 0 0.5em;
         text-transform: uppercase;
     }
 
     .input-row {
         display: flex;
         gap: 2rem;
-    }
-
-    .name-group {
-        flex-grow: 1;
-
-        input {
-            font-family: "OCR A Std", monospace;
-            text-transform: uppercase;
-        }
     }
 
     .back {
@@ -117,16 +84,6 @@
             left: 0;
             right: 0;
             top: 1.5rem;
-        }
-
-        .ccv-group {
-            position: absolute;
-            bottom: 3.25rem;
-            right: 0.5rem;
-        }
-
-        .ccv-input {
-            width: 3ch;
         }
     }
 }

@@ -10,7 +10,10 @@ import "./App.scss";
 const App = () => {
     const formikRef = useRef<FormikProps<CreditCardInitialValuesType>>(null);
 
-    const submitForm = () => formikRef.current?.submitForm();
+    const submitForm = () => {
+        console.log("Form errors", formikRef.current?.errors);
+        formikRef.current?.submitForm();
+    };
 
     return (
         <div className="App">

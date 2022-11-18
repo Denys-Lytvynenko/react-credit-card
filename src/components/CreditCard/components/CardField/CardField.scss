@@ -1,0 +1,16 @@
+@import "../../variables.scss";
+
+.credit-card {
+    input,
+    select {
+        padding: 0.25em 0.5em;
+        border: 1px solid transparent;
+        border-radius: 0.25em;
+        appearance: none;
+        transition: all 0.3s ease;
+    }
+
+    input.card-input-error {
+        border: 1px solid $errorColor;
+    }
+}

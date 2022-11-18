@@ -1,0 +1,11 @@
+@import "../../variables.scss";
+
+.horizontal-input-stack {
+    display: flex;
+    gap: 0.5rem;
+
+    input {
+        font-family: $cardFontFamily;
+        width: 4ch;
+    }
+}

@@ -1,8 +1,13 @@
-import { useField, Field } from "formik";
-import { FC, ChangeEvent, ClipboardEvent } from "react";
+import { useField } from "formik";
+import { ChangeEvent, ClipboardEvent, FC } from "react";
 
 import { onlyDigits, threeDigits } from "../../utils/patterns";
 import { CcvCodeInputType } from "./types";
+
+import CardError from "../CardError/CardError";
+import CardField from "../CardField/CardField";
+
+import "./CcvCodeInput.scss";
 
 const CcvCodeInput: FC<CcvCodeInputType> = ({ ccvCodeInputLabel = "ccv" }) => {
     const [{ value }, , { setValue }] = useField("ccvCode");
@@ -31,7 +36,7 @@ const CcvCodeInput: FC<CcvCodeInputType> = ({ ccvCodeInputLabel = "ccv" }) => {
         <div className="form-group ccv-group">
             <label htmlFor="ccv">{ccvCodeInputLabel}</label>
 
-            <Field
+            <CardField
                 name="ccvCode"
                 type="text"
                 id="ccv"
@@ -42,6 +47,8 @@ const CcvCodeInput: FC<CcvCodeInputType> = ({ ccvCodeInputLabel = "ccv" }) => {
                 onChange={onChange}
                 onPaste={onPaste}
             />
+
+            <CardError name="ccvCode" />
         </div>
     );
 };

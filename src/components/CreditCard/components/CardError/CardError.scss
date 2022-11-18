@@ -1,0 +1,11 @@
+@import "../../variables.scss";
+
+$errorFontSize: 0.6rem;
+
+.card-error-message {
+    font-size: $errorFontSize;
+    font-weight: 600;
+    line-height: 1;
+    color: $errorColor;
+    height: $errorFontSize;
+}

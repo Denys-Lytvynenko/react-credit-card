@@ -7,6 +7,8 @@ import mastercard from "../../images/mastercard.svg";
 import unionpay from "../../images/unionpay.svg";
 import visa from "../../images/visa.svg";
 
+import "./CardLogo.scss";
+
 const paymentSystemIcons: { [key: string]: string } = {
     amex,
     discover,

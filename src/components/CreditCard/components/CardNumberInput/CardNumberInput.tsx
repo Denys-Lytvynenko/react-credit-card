@@ -1,4 +1,4 @@
-import { Field, useField } from "formik";
+import { useField } from "formik";
 import {
     ChangeEvent,
     ClipboardEvent,
@@ -14,6 +14,11 @@ import { CardContext } from "../../context/CardContext";
 import { ACTION_TYPES } from "../../context/reducer";
 import { fourDigits, onlyDigits } from "../../utils/patterns";
 import { CardNumberInputType } from "./types";
+
+import CardError from "../CardError/CardError";
+import CardField from "../CardField/CardField";
+
+import "./CardNumberInput.scss";
 
 const CardNumberInput: FC<CardNumberInputType> = ({
     cardNumberInputLabel = "Card number",
@@ -181,7 +186,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
             <label htmlFor="cc-1">{cardNumberInputLabel}</label>
 
             <div className="horizontal-input-stack">
-                <Field
+                <CardField
                     name="cardNumber1"
                     type="text"
                     id="cc-1"
@@ -194,7 +199,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                     onKeyDown={handleKey}
                 />
 
-                <Field
+                <CardField
                     name="cardNumber2"
                     type="text"
                     id="cc-1"
@@ -207,7 +212,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                     onKeyDown={handleKey}
                 />
 
-                <Field
+                <CardField
                     name="cardNumber3"
                     type="text"
                     id="cc-1"
@@ -220,7 +225,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                     onKeyDown={handleKey}
                 />
 
-                <Field
+                <CardField
                     name="cardNumber4"
                     type="text"
                     id="cc-1"
@@ -233,6 +238,8 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                     onKeyDown={handleKey}
                 />
             </div>
+
+            <CardError name="cardNumber1" />
         </fieldset>
     );
 };
