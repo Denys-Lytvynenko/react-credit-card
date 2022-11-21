@@ -1,6 +1,7 @@
 import { Field, useField } from "formik";
 import { FC, useMemo } from "react";
 
+import { keyGenerator } from "../../utils/helpers";
 import { ExpirationType } from "./types";
 
 const Expiration: FC<ExpirationType> = ({
@@ -19,7 +20,7 @@ const Expiration: FC<ExpirationType> = ({
 
         for (let i = currentYear; i < currentYear + expirationDateLimit; i++) {
             options.push(
-                <option value={i} key={i}>
+                <option value={i} key={keyGenerator(i)}>
                     {i}
                 </option>
             );
@@ -46,7 +47,7 @@ const Expiration: FC<ExpirationType> = ({
             }
 
             options.push(
-                <option value={optionValue} key={optionValue}>
+                <option value={optionValue} key={keyGenerator(optionValue)}>
                     {optionValue}
                 </option>
             );
