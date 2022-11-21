@@ -16,6 +16,7 @@ const creditCardInitialValues: CreditCardInitialValuesType = {
     cardNumber2: "",
     cardNumber3: "",
     cardNumber4: "",
+    cardNumber: "",
     cardHolderName: "",
     expirationMonth: (new Date().getMonth() + 1).toString(),
     expirationYear: new Date().getFullYear().toString(),
@@ -36,16 +37,19 @@ const validateForm = (
 
     let errors: FormikErrors<CreditCardInitialValuesType> = {};
 
-    if (
-        cardNumber1.length < 4 ||
-        cardNumber2.length < 4 ||
-        cardNumber3.length < 4 ||
-        cardNumber4.length < 4
-    ) {
-        errors.cardNumber1 = "Card number must contain 16 digits";
-        errors.cardNumber2 = "Card number must contain 16 digits";
-        errors.cardNumber3 = "Card number must contain 16 digits";
-        errors.cardNumber4 = "Card number must contain 16 digits";
+    if (cardNumber1.length < 4) errors.cardNumber1 = "Must contain 4 digit";
+    if (cardNumber2.length < 4) errors.cardNumber2 = "Must contain 4 digit";
+    if (cardNumber3.length < 4) errors.cardNumber3 = "Must contain 4 digit";
+    if (cardNumber4.length < 4) errors.cardNumber4 = "Must contain 4 digit";
+
+    const cardNumberLength =
+        cardNumber1.length +
+        cardNumber2.length +
+        cardNumber3.length +
+        cardNumber4.length;
+
+    if (cardNumberLength < 16) {
+        errors.cardNumber = "Card number must contain 16 digits";
     }
 
     if (cardHolderName.replaceAll(spaces, "").trim().length < 3) {
@@ -58,7 +62,7 @@ const validateForm = (
     }
 
     if (ccvCode.length < 3) {
-        errors.ccvCode = "Enter CCV code";
+        errors.ccvCode = "Enter code";
     }
 
     return errors;

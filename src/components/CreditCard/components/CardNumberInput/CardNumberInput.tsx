@@ -23,18 +23,34 @@ import "./CardNumberInput.scss";
 const CardNumberInput: FC<CardNumberInputType> = ({
     cardNumberInputLabel = "Card number",
 }) => {
-    const [{ value: value1 }, , { setValue: setValue1 }] =
+    const [{ value: value1 }, { touched: touched1 }, { setValue: setValue1 }] =
         useField("cardNumber1");
-    const [{ value: value2 }, , { setValue: setValue2 }] =
+    const [{ value: value2 }, { touched: touched2 }, { setValue: setValue2 }] =
         useField("cardNumber2");
-    const [{ value: value3 }, , { setValue: setValue3 }] =
+    const [{ value: value3 }, { touched: touched3 }, { setValue: setValue3 }] =
         useField("cardNumber3");
-    const [{ value: value4 }, , { setValue: setValue4 }] =
+    const [{ value: value4 }, { touched: touched4 }, { setValue: setValue4 }] =
         useField("cardNumber4");
+    const [, , { setValue, setTouched }] = useField("cardNumber");
 
     const { dispatch } = useContext(CardContext);
 
     const BIN = value1 + value2;
+
+    useEffect(() => {
+        setValue(value1 + value2 + value3 + value4);
+        if (touched1 || touched2 || touched3 || touched4) setTouched(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        value1,
+        value2,
+        value3,
+        value4,
+        touched1,
+        touched2,
+        touched3,
+        touched4,
+    ]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -239,7 +255,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                 />
             </div>
 
-            <CardError name="cardNumber1" />
+            <CardError name="cardNumber" />
         </fieldset>
     );
 };

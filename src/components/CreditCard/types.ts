@@ -45,6 +45,7 @@ export type CreditCardInitialValuesType = {
     cardNumber2: string;
     cardNumber3: string;
     cardNumber4: string;
+    cardNumber: string;
     cardHolderName: string;
     expirationMonth: string;
     expirationYear: string;
