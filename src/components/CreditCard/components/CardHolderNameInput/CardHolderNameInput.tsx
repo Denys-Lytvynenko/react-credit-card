@@ -29,6 +29,7 @@ const CardHolderNameInput: FC<CardHolderNameInputType> = ({
                 name="cardHolderName"
                 type="text"
                 id="cardHolderName"
+                maxLength={50}
                 required
                 value={value}
                 onChange={onChange}

@@ -35,7 +35,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
 
     const { dispatch } = useContext(CardContext);
 
-    const BIN = value1 + value2;
+    const BIN = value1 + value2[0] + value2[1];
 
     useEffect(() => {
         setValue(value1 + value2 + value3 + value4);
@@ -55,14 +55,13 @@ const CardNumberInput: FC<CardNumberInputType> = ({
     useEffect(() => {
         const controller = new AbortController();
 
-        if (4 <= BIN.length && BIN.length <= 6) {
+        if (value1.length === 4 && 4 <= BIN.length && BIN.length <= 6) {
             fetchData<BINCheckResponseTypes>(
                 "https://lookup.binlist.net/",
                 BIN,
                 controller.signal
             )
                 .then((data) => {
-                    console.log("Data", data.scheme);
                     if (data.scheme !== null) {
                         dispatch<string>({
                             type: ACTION_TYPES.CHANGE_PAYMENT_SYSTEM,
@@ -70,12 +69,11 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                         });
                     }
                 })
-
                 .catch((e) => console.error(e));
         }
 
         return () => controller.abort();
-    }, [BIN, dispatch]);
+    }, [BIN, value1, dispatch]);
 
     const cardNumberHandler = (
         event: ChangeEvent<HTMLInputElement>,
