@@ -75,6 +75,12 @@ const CreditCardForm: FC<CreditCardProps> = ({
     expirationDateLimitLabel,
     expirationDateLimit,
     ccvCodeInputLabel,
+    frontCardAccentColor = "gray",
+    isFrontCardSolidColor = false,
+    frontCardCustomBG = "",
+    backCardAccentColor = "gray",
+    isBackCardSolidColor = true,
+    backCardCustomBG = "",
     labelColor = "white",
     innerRef = null,
 }) => {
@@ -95,7 +101,11 @@ const CreditCardForm: FC<CreditCardProps> = ({
         >
             <Form className="credit-card" style={{ color: labelColor }}>
                 <div className="front">
-                    <CardBackground accentColor="gray" />
+                    <CardBackground
+                        accentColor={frontCardAccentColor}
+                        solid={isFrontCardSolidColor}
+                        customBG={frontCardCustomBG}
+                    />
 
                     <div className="card-data-row">
                         <div className="brand-name">{bankName}</div>
@@ -120,7 +130,11 @@ const CreditCardForm: FC<CreditCardProps> = ({
                 </div>
 
                 <div className="back">
-                    <CardBackground solid accentColor="gray" />
+                    <CardBackground
+                        accentColor={backCardAccentColor}
+                        solid={isBackCardSolidColor}
+                        customBG={backCardCustomBG}
+                    />
 
                     <div className="stripe" />
 

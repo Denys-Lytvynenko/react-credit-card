@@ -1,13 +1,5 @@
-type CardBackgroundAccent = {
-    solid?: false;
+export type CardBackgroundType = {
+    solid?: boolean;
     accentColor?: string;
     customBG?: string;
 };
-
-type CardBackgroundSolid = {
-    solid: true;
-    accentColor: string;
-    customBG?: string;
-};
-
-export type CardBackgroundType = CardBackgroundAccent | CardBackgroundSolid;

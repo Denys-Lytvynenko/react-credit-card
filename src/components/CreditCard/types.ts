@@ -1,3 +1,5 @@
+import { StandardLonghandProperties } from "csstype";
+
 export type CreditCardProps = {
     /**
      * The name of the bank that is
@@ -37,7 +39,14 @@ export type CreditCardProps = {
      * Set label color.
      * Default value is - "white"
      */
-    labelColor?: string;
+    labelColor?: StandardLonghandProperties["color"];
+
+    frontCardAccentColor?: StandardLonghandProperties["color"];
+    isFrontCardSolidColor?: boolean;
+    frontCardCustomBG?: string;
+    backCardAccentColor?: StandardLonghandProperties["color"];
+    isBackCardSolidColor?: boolean;
+    backCardCustomBG?: string;
 };
 
 export type CreditCardInitialValuesType = {
