@@ -1,5 +1,5 @@
 import { FormikProps } from "formik";
-import { useRef } from "react";
+import { FC, useRef } from "react";
 
 import { CreditCardInitialValuesType } from "./components/CreditCard/types";
 
@@ -7,7 +7,7 @@ import CreditCard from "./components/CreditCard/CreditCard";
 
 import "./App.scss";
 
-const App = () => {
+const App: FC = () => {
     const formikRef = useRef<FormikProps<CreditCardInitialValuesType>>(null);
 
     const submitForm = () => {
