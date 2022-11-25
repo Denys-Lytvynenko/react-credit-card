@@ -1,5 +1,7 @@
 # Project info
 
+![Card icon](/public/favicon.png)
+
 Reusable card component with auto payment system detection and ability of customization card view.
 
 # Run project
