@@ -13,13 +13,17 @@ export const fetchData = async <T>(
                 signal,
             });
 
+            if (!response.ok) {
+                reject(response);
+            }
+
             const data = await response.json();
 
             resolve(data);
         } catch (error) {
             console.error(
                 `Error occur on fetching data from "${url}${query}": `,
-                error
+                { error }
             );
             reject(error);
         }

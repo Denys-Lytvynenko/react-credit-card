@@ -79,7 +79,9 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                         });
                     }
                 })
-                .catch((e) => console.error(e));
+                .catch((error) => {
+                    console.error("Detect payment system error: ", error);
+                });
         }
 
         return () => controller.abort();
