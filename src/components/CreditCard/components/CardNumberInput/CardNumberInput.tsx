@@ -1,4 +1,4 @@
-import { useField } from "formik";
+import { ErrorMessage, useField } from "formik";
 import {
     ChangeEvent,
     ClipboardEvent,
@@ -15,7 +15,6 @@ import { ACTION_TYPES } from "../../context/reducer";
 import { fourDigits, onlyDigits } from "../../utils/patterns";
 import { CardNumberInputType } from "./types";
 
-import CardError from "../CardError/CardError";
 import CardField from "../CardField/CardField";
 
 import "./CardNumberInput.scss";
@@ -23,19 +22,29 @@ import "./CardNumberInput.scss";
 const CardNumberInput: FC<CardNumberInputType> = ({
     cardNumberInputLabel = "Card number",
 }) => {
-    const [{ value: value1 }, { touched: touched1 }, { setValue: setValue1 }] =
-        useField("cardNumber1");
-    const [{ value: value2 }, { touched: touched2 }, { setValue: setValue2 }] =
-        useField("cardNumber2");
-    const [{ value: value3 }, { touched: touched3 }, { setValue: setValue3 }] =
-        useField("cardNumber3");
-    const [{ value: value4 }, { touched: touched4 }, { setValue: setValue4 }] =
-        useField("cardNumber4");
+    const [
+        { value: value1 },
+        { touched: touched1, error: error1 },
+        { setValue: setValue1 },
+    ] = useField("cardNumber1");
+    const [
+        { value: value2 },
+        { touched: touched2, error: error2 },
+        { setValue: setValue2 },
+    ] = useField("cardNumber2");
+    const [
+        { value: value3 },
+        { touched: touched3, error: error3 },
+        { setValue: setValue3 },
+    ] = useField("cardNumber3");
+    const [
+        { value: value4 },
+        { touched: touched4, error: error4 },
+        { setValue: setValue4 },
+    ] = useField("cardNumber4");
     const [, , { setValue, setTouched }] = useField("cardNumber");
 
     const { dispatch } = useContext(CardContext);
-
-    const BIN = value1 + value2[0] + value2[1];
 
     useEffect(() => {
         setValue(value1 + value2 + value3 + value4);
@@ -54,8 +63,9 @@ const CardNumberInput: FC<CardNumberInputType> = ({
 
     useEffect(() => {
         const controller = new AbortController();
+        const BIN = value1 + value2;
 
-        if (value1.length === 4 && 4 <= BIN.length && BIN.length <= 6) {
+        if (value1.length === 4 && BIN.length <= 6) {
             fetchData<BINCheckResponseTypes>(
                 "https://lookup.binlist.net/",
                 BIN,
@@ -73,7 +83,7 @@ const CardNumberInput: FC<CardNumberInputType> = ({
         }
 
         return () => controller.abort();
-    }, [BIN, value1, dispatch]);
+    }, [value1, value2, dispatch]);
 
     const cardNumberHandler = (
         event: ChangeEvent<HTMLInputElement>,
@@ -253,7 +263,12 @@ const CardNumberInput: FC<CardNumberInputType> = ({
                 />
             </div>
 
-            <CardError name="cardNumber" />
+            <span className="card-error-message">
+                {((touched1 && error1) ||
+                    (touched2 && error2) ||
+                    (touched3 && error3) ||
+                    (touched4 && error4)) && <ErrorMessage name="cardNumber" />}
+            </span>
         </fieldset>
     );
 };

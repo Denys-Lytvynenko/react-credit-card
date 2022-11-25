@@ -1,5 +1,5 @@
-import { FormikProps } from "formik";
-import { FC, useRef } from "react";
+import { FormikHelpers } from "formik";
+import { FC } from "react";
 
 import { CreditCardInitialValuesType } from "./components/CreditCard/types";
 
@@ -8,29 +8,22 @@ import CreditCard from "./components/CreditCard/CreditCard";
 import "./App.scss";
 
 const App: FC = () => {
-    const formikRef = useRef<FormikProps<CreditCardInitialValuesType>>(null);
-
-    const submitForm = () => {
-        console.log("Form errors", formikRef.current?.errors);
-        formikRef.current?.submitForm();
+    const submitForm = (
+        values: CreditCardInitialValuesType,
+        helpers: FormikHelpers<CreditCardInitialValuesType>
+    ) => {
+        console.log("Form values", values);
+        console.log("Form helpers", helpers);
     };
 
     return (
         <div className="App">
             <CreditCard
-                innerRef={formikRef}
+                onSubmit={submitForm}
                 bankName="BankName"
                 expirationDateLimit={10}
                 labelColor="black"
             />
-
-            <button
-                type="submit"
-                onClick={submitForm}
-                style={{ marginTop: "100px" }}
-            >
-                submit
-            </button>
         </div>
     );
 };

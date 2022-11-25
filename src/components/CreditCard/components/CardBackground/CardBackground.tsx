@@ -34,7 +34,7 @@ const CardBackground: FC<CardBackgroundType> = ({
                             gradientUnits="userSpaceOnUse"
                             x1="0"
                             x2="0"
-                            y1="-100%"
+                            y1="-250%"
                             y2="100%"
                             gradientTransform="rotate(215)"
                         >
