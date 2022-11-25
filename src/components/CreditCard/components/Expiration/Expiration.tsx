@@ -1,5 +1,5 @@
 import { Field, useField } from "formik";
-import { FC, useMemo } from "react";
+import { FC, KeyboardEvent, useMemo } from "react";
 
 import { keyGenerator } from "../../utils/helpers";
 import { ExpirationType } from "./types";
@@ -66,6 +66,32 @@ const Expiration: FC<ExpirationType> = ({
         return options;
     }, [value]);
 
+    const handleKeyPress = (event: KeyboardEvent<HTMLSelectElement>): void => {
+        const key = event.key;
+        const target = event.currentTarget;
+
+        const prev = target.previousSibling as HTMLInputElement | null;
+        const next = target.nextSibling as HTMLInputElement | null;
+
+        switch (key) {
+            case "ArrowLeft":
+                event.preventDefault();
+                if (prev) {
+                    prev.focus();
+                }
+                break;
+
+            case "ArrowRight":
+                event.preventDefault();
+                if (next) {
+                    next.focus();
+                }
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <fieldset className="form-group">
             <legend>{expirationDateLimitLabel}</legend>
@@ -78,6 +104,7 @@ const Expiration: FC<ExpirationType> = ({
                     as="select"
                     id="expiration-month"
                     aria-label="Expiration Month"
+                    onKeyDown={handleKeyPress}
                     required
                 >
                     {monthOptions}
@@ -88,6 +115,7 @@ const Expiration: FC<ExpirationType> = ({
                     as="select"
                     id="expiration-year"
                     aria-label="Expiration year"
+                    onKeyDown={handleKeyPress}
                     required
                 >
                     {yearsOptions}
