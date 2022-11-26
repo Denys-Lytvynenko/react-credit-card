@@ -4,12 +4,12 @@ import { FC } from "react";
 import { CreditCardInitialValuesType, CreditCardProps } from "../../types";
 import { spaces } from "../../utils/patterns";
 
-import CardAutoSubmit from "../CardAutoSubmit/CardAutoSubmit";
-
+// import CardAutoSubmit from "../CardAutoSubmit/CardAutoSubmit";
 import CardBackground from "../CardBackground/CardBackground";
 import CardHolderNameInput from "../CardHolderNameInput/CardHolderNameInput";
 import CardLogo from "../CardLogo/CardLogo";
 import CardNumberInput from "../CardNumberInput/CardNumberInput";
+import CardSubmitButton from "../CardSubmitButton/CardSubmitButton";
 import CcvCodeInput from "../CcvCodeInput/CcvCodeInput";
 import Expiration from "../Expiration/Expiration";
 
@@ -73,7 +73,7 @@ const validateForm = (
 const CreditCardForm: FC<CreditCardProps> = ({
     bankName,
     onSubmit,
-    disableAutoSubmit,
+    // disableAutoSubmit,
     cardNumberInputLabel,
     cardHolderNameInputLabel,
     expirationDateLimitLabel,
@@ -100,32 +100,28 @@ const CreditCardForm: FC<CreditCardProps> = ({
             validate={validateForm}
             onSubmit={submitForm}
         >
-            <CardAutoSubmit disableAutoSubmit={disableAutoSubmit}>
-                <Form className="credit-card" style={{ color: labelColor }}>
+            {/* <CardAutoSubmit disableAutoSubmit={disableAutoSubmit}> */}
+            <Form className="credit-card-form">
+                <div className="credit-card" style={{ color: labelColor }}>
                     <div className="front">
                         <CardBackground
                             accentColor={frontCardAccentColor}
                             solid={isFrontCardSolidColor}
                             customBG={frontCardCustomBG}
                         />
-
                         <div className="card-data-row">
                             <div className="brand-name">{bankName}</div>
-
                             <CardLogo />
                         </div>
-
                         <CardNumberInput
                             cardNumberInputLabel={cardNumberInputLabel}
                         />
-
                         <div className="input-row">
                             <CardHolderNameInput
                                 cardHolderNameInputLabel={
                                     cardHolderNameInputLabel
                                 }
                             />
-
                             <Expiration
                                 expirationDateLimitLabel={
                                     expirationDateLimitLabel
@@ -141,13 +137,14 @@ const CreditCardForm: FC<CreditCardProps> = ({
                             solid={isBackCardSolidColor}
                             customBG={backCardCustomBG}
                         />
-
                         <div className="stripe" />
-
                         <CcvCodeInput ccvCodeInputLabel={ccvCodeInputLabel} />
                     </div>
-                </Form>
-            </CardAutoSubmit>
+                </div>
+
+                <CardSubmitButton />
+            </Form>
+            {/* </CardAutoSubmit> */}
         </Formik>
     );
 };

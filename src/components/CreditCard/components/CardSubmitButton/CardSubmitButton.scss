@@ -1,0 +1,48 @@
+@import "../../variables.scss";
+
+.submit_button {
+    width: fit-content;
+    padding: 0.5em 1em;
+    border-radius: 0.25rem;
+    border: none;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    transition: $transition;
+
+    &:disabled {
+        background-color: lightgray;
+        cursor: not-allowed;
+    }
+
+    &:enabled {
+        cursor: pointer;
+        background-color: rgb(56 194 56);
+        &:hover {
+            filter: brightness(110%);
+        }
+    }
+
+    .button_loader {
+        width: 0;
+        height: 0;
+        background: url(../../images//rolling.svg) no-repeat center;
+        display: inline-block;
+        margin-right: 3px;
+        transition: $transition;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    &.loading {
+        .button_loader {
+            width: 16px;
+            height: 16px;
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}

@@ -1,12 +1,31 @@
+$cardWidth: 350px;
+$cardHeight: 210px;
+$backCardLeftOffset: 3.5rem;
+$backCardTopOffset: 2rem;
+
 .credit-card {
     font-family: Arial;
     position: relative;
+    width: calc($cardWidth + $backCardLeftOffset);
+    height: calc($cardHeight + $backCardTopOffset);
+
+    * {
+        box-sizing: border-box;
+    }
+
+    &-form {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
 
     .front,
     .back {
         border-radius: 0.8rem;
-        width: 350px;
-        height: 210px;
+        width: $cardWidth;
+        height: $cardHeight;
         padding: 0.75rem 1rem;
         padding-bottom: 1.25rem;
         box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3);
@@ -67,8 +86,8 @@
 
     .back {
         position: absolute;
-        top: 2rem;
-        left: 3.5rem;
+        top: $backCardTopOffset;
+        left: $backCardLeftOffset;
 
         .stripe {
             background-color: hsl(200, 80%, 10%);

@@ -1,5 +1,6 @@
 import { StandardLonghandProperties } from "csstype";
 import { FormikHelpers } from "formik";
+import { ReactNode } from "react";
 
 export type CreditCardProps = {
     /**
@@ -19,7 +20,8 @@ export type CreditCardProps = {
      * Disable auto submit.
      * Default value is - "false"
      */
-    disableAutoSubmit?: boolean;
+    /* TODO: uncomment when bug will be fixed
+    // disableAutoSubmit?: boolean;
     /**
      * Inner ref to get formik values and helpers from the outside credit card component
      */
@@ -87,6 +89,11 @@ export type CreditCardProps = {
      * Default value is - undefined.
      */
     backCardCustomBG?: string;
+    /**
+     * Pass your child component to credit card form.
+     * As example specify submit button component.
+     */
+    children?: ReactNode;
 };
 
 export type CreditCardInitialValuesType = {

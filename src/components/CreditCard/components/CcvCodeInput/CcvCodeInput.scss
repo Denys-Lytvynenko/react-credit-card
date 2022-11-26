@@ -3,8 +3,9 @@
     bottom: 3.25rem;
     right: 0.5rem;
     width: min-content;
-}
 
-.ccv-input {
-    width: 3ch;
+    .ccv-input {
+        width: 3ch;
+        box-sizing: initial;
+    }
 }

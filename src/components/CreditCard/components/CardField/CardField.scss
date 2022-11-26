@@ -7,7 +7,7 @@
         border: 1px solid transparent;
         border-radius: 0.25em;
         appearance: none;
-        transition: all 0.3s ease;
+        transition: $transition;
     }
 
     input.card-input-error {
