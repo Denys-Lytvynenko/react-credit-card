@@ -1,13 +1,26 @@
+@import "./variables.scss";
+
+/* Desktop/tablet size */
 $cardWidth: 350px;
 $cardHeight: 210px;
 $backCardLeftOffset: 3.5rem;
 $backCardTopOffset: 2rem;
+
+/* Mobile size */
+$mobileCardWidth: 320px;
+$mobileCardHeight: 192px;
+$mobileBackCardTopOffset: 5rem;
 
 .credit-card {
     font-family: Arial;
     position: relative;
     width: calc($cardWidth + $backCardLeftOffset);
     height: calc($cardHeight + $backCardTopOffset);
+
+    @include phone {
+        width: $mobileCardWidth;
+        height: calc($mobileCardHeight + $mobileBackCardTopOffset);
+    }
 
     * {
         box-sizing: border-box;
@@ -30,6 +43,11 @@ $backCardTopOffset: 2rem;
         padding-bottom: 1.25rem;
         box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3);
         overflow: hidden;
+
+        @include phone {
+            width: $mobileCardWidth;
+            height: $mobileCardHeight;
+        }
     }
 
     .front {
@@ -38,6 +56,10 @@ $backCardTopOffset: 2rem;
         gap: 1rem;
         z-index: 1;
         position: relative;
+
+        @include phone {
+            gap: 0.5rem;
+        }
     }
 
     .card-data-row {
@@ -45,6 +67,10 @@ $backCardTopOffset: 2rem;
         align-items: center;
         justify-content: space-between;
         margin-bottom: auto;
+
+        @include phone {
+            margin-bottom: initial;
+        }
     }
 
     .brand-name {
@@ -89,8 +115,13 @@ $backCardTopOffset: 2rem;
         top: $backCardTopOffset;
         left: $backCardLeftOffset;
 
+        @include phone {
+            top: $mobileBackCardTopOffset;
+            left: 0;
+        }
+
         .stripe {
-            background-color: hsl(200, 80%, 10%);
+            background-color: #05202e;
             height: 35px;
             position: absolute;
             left: 0;

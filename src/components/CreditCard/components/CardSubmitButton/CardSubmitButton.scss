@@ -10,17 +10,17 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    color: white;
+    color: #ffffff;
     transition: $transition;
 
     &:disabled {
-        background-color: lightgray;
+        background-color: #d3d3d3;
         cursor: not-allowed;
     }
 
     &:enabled {
         cursor: pointer;
-        background-color: rgb(56 194 56);
+        background-color: #38c238;
         &:hover {
             filter: brightness(110%);
         }

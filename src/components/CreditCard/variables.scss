@@ -5,6 +5,12 @@
     font-style: normal;
 }
 
-$errorColor: red;
+$errorColor: #ff0000;
 $cardFontFamily: "OCR A Std", monospace;
 $transition: all 0.3s ease;
+
+@mixin phone {
+    @media (max-width: 500px) {
+        @content;
+    }
+}

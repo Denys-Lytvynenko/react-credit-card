@@ -1,8 +1,15 @@
+@import "../../variables.scss";
+
 .ccv-group {
     position: absolute;
     bottom: 3.25rem;
     right: 0.5rem;
     width: min-content;
+
+    @include phone {
+        bottom: 1rem;
+        right: 1rem;
+    }
 
     .ccv-input {
         width: 3ch;
