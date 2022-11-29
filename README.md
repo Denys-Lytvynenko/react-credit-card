@@ -30,9 +30,3 @@ On typing of first 4-6 digits of card number API call occurs to detect payment s
 -   6222 - Unionpay
 -   3782 - AMEX
 -   60110 - Discover
-
-![Auto payment system detection](/demo_videos/1.Payment_system_autodetection.mp4)
-
-<video width="320" height="240" controls>
-  <source src="/demo_videos/1.Payment_system_autodetection.mp4" type="video/mp4">
-</video>
