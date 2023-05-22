@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/Denys-Lytvynenko/react-credit-card/static/css/main.c4dcca72.css",
-    "main.js": "/Denys-Lytvynenko/react-credit-card/static/js/main.3aa1e407.js",
-    "static/media/ocrastd.otf": "/Denys-Lytvynenko/react-credit-card/static/media/ocrastd.a92debed9e037ee625f9.otf",
-    "static/media/unionpay.svg": "/Denys-Lytvynenko/react-credit-card/static/media/unionpay.68b5726d3e70e430284a1abd7bf1a6cc.svg",
-    "static/media/discover.svg": "/Denys-Lytvynenko/react-credit-card/static/media/discover.ec3d42e7e2b52adb60561408dc95d6ba.svg",
-    "static/media/amex.svg": "/Denys-Lytvynenko/react-credit-card/static/media/amex.7063b8c04a257a0283ff9d2a48f68d68.svg",
-    "static/media/visa.svg": "/Denys-Lytvynenko/react-credit-card/static/media/visa.a035952f4aa35e39fe943646ef9020d1.svg",
-    "static/media/mastercard.svg": "/Denys-Lytvynenko/react-credit-card/static/media/mastercard.1d308dfd67e2cb32087137c810e297f9.svg",
-    "index.html": "/Denys-Lytvynenko/react-credit-card/index.html",
-    "static/media/rolling.svg": "/Denys-Lytvynenko/react-credit-card/static/media/rolling.3d95035307b2050e9f5a.svg",
-    "main.c4dcca72.css.map": "/Denys-Lytvynenko/react-credit-card/static/css/main.c4dcca72.css.map",
-    "main.3aa1e407.js.map": "/Denys-Lytvynenko/react-credit-card/static/js/main.3aa1e407.js.map"
+    "main.css": "/react-credit-card/static/css/main.becb0ccf.css",
+    "main.js": "/react-credit-card/static/js/main.664e48cd.js",
+    "static/media/ocrastd.otf": "/react-credit-card/static/media/ocrastd.a92debed9e037ee625f9.otf",
+    "static/media/unionpay.svg": "/react-credit-card/static/media/unionpay.68b5726d3e70e430284a1abd7bf1a6cc.svg",
+    "static/media/discover.svg": "/react-credit-card/static/media/discover.ec3d42e7e2b52adb60561408dc95d6ba.svg",
+    "static/media/amex.svg": "/react-credit-card/static/media/amex.7063b8c04a257a0283ff9d2a48f68d68.svg",
+    "static/media/visa.svg": "/react-credit-card/static/media/visa.a035952f4aa35e39fe943646ef9020d1.svg",
+    "static/media/mastercard.svg": "/react-credit-card/static/media/mastercard.1d308dfd67e2cb32087137c810e297f9.svg",
+    "static/media/rolling.svg": "/react-credit-card/static/media/rolling.3d95035307b2050e9f5a.svg",
+    "index.html": "/react-credit-card/index.html",
+    "main.becb0ccf.css.map": "/react-credit-card/static/css/main.becb0ccf.css.map",
+    "main.664e48cd.js.map": "/react-credit-card/static/js/main.664e48cd.js.map"
   },
   "entrypoints": [
-    "static/css/main.c4dcca72.css",
-    "static/js/main.3aa1e407.js"
+    "static/css/main.becb0ccf.css",
+    "static/js/main.664e48cd.js"
   ]
 }
