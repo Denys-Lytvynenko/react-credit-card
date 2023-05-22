@@ -3,6 +3,7 @@
 ![Card icon](/public/favicon.png)
 
 Reusable card component with auto payment system detection and ability of customization card view.
+[Production site](https://denys-lytvynenko.github.io/react-credit-card/).
 
 # Desktop layout
 
