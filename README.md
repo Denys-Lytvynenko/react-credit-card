@@ -4,6 +4,19 @@
 
 Reusable card component with auto payment system detection and ability of customization card view.
 
+# Auto detection of payment system
+
+Implemented auto detection of payment system by using https://lookup.binlist.net/ API. <br>
+On typing of first 4-6 digits of card number API call occurs to detect payment system. After receiving of successful response from the API you can see payment system logo at the top right corner of the front card.
+
+# Supported payment systems
+
+-   4149 - Visa
+-   5168 - Mastercard
+-   6222 - Unionpay
+-   3782 - AMEX
+-   60110 - Discover
+
 # Run project
 
 1. First of all you need to install dependencies from npm:
@@ -18,15 +31,8 @@ npm install
 npm start
 ```
 
-# Auto detection of payment system
+# License
 
-Implemented auto detection of payment system by using https://lookup.binlist.net/ API. <br>
-On typing of first 4-6 digits of card number API call occurs to detect payment system. After receiving of successful response from the API you can see payment system logo at the top right corner of the front card.
+Copyright (c) 2023 Denys Lytvynenko. All rights reserved.
 
-# Supported payment systems
-
--   4149 - Visa
--   5168 - Mastercard
--   6222 - Unionpay
--   3782 - AMEX
--   60110 - Discover
+Licensed under the [MIT](./LICENSE.txt) license.
