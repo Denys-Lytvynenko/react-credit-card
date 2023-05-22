@@ -43,5 +43,6 @@
     },
     "devDependencies": {
         "sass": "^1.55.0"
-    }
+    },
+    "homepage": "https://github.com/Denys-Lytvynenko/react-credit-card"
 }
